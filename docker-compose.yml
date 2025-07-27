@@ -14,7 +14,7 @@ services:
     depends_on:
       - mysql  # 이 서비스가 mysql이 먼저 실행된 후 시작되도록
     networks:
-      - sbs-network  # mysql과 같은 네트워크를 공유
+      - junglegym-network  # mysql과 같은 네트워크를 공유
 
   mysql:
     image: mysql:8.0  # 공식 MySQL 8.0 이미지를 사용
