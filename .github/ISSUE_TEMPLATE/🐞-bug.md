@@ -1,7 +1,7 @@
 ---
 name: 🐞 Bug
 about: 동작 오류 또는 예외 상황을 기록할 때
-title: "🐞Bug: "
+title: "🐞 Bug: "
 labels: "🐞 Bug"
 assignees: ''
 ---

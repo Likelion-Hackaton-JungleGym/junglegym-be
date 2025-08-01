@@ -1,7 +1,7 @@
 ---
 name: ♻️ Refactor
 about: 리팩토링할 때
-title: "♻️Refactor: "
+title: "♻️ Refactor: "
 labels: "♻️ Refactor"
 assignees: ''
 

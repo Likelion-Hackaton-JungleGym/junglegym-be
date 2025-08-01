@@ -1,7 +1,7 @@
 ---
 name: ✨ Feature
 about: 새로운 기능을 개발할 때
-title: "✨Feat: "
+title: "✨ Feat: "
 labels: "✨ Feature"
 assignees: ''
 

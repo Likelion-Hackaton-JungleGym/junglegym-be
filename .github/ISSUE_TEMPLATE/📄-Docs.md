@@ -1,8 +1,8 @@
 ---
-name: Documentation
+name: 📄 Docs
 about: Swagger 등 문서 업데이트나 신규 작성 시
-title: "[Docs] "
-labels: ":memo: Docs"
+title: "📄 Docs: "
+labels: "📄 Docs"
 assignees: ''
 
 ---
