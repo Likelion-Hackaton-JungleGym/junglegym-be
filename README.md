@@ -18,44 +18,15 @@
 ## 🪴 Branch Convention (GitHub Flow)
 
 - `main`: 배포 가능한 브랜치, 항상 배포 가능한 상태를 유지
-- `feature/{description}`: 새로운 기능을 개발하는 브랜치
-    - 예: `feature/social-login`
+- `feat/{이슈번호}-{description}`: 새로운 기능을 개발하는 브랜치
+    - 예: `feat/23-users-login`
 
-### Flow
+## 💡 Flow
 
-1. `main` 브랜치에서 새로운 브랜치를 생성.
-2. 작업을 완료하고 커밋 메시지에 맞게 커밋.
-3. Pull Request를 생성 / 팀원들의 리뷰.
-4. 리뷰가 완료되면 `main` 브랜치로 병합.
-5. 병합 후, 필요시 배포.
-
-**예시**:
-
-```bash
-# 새로운 기능 개발
-git checkout -b feature/social-login
-
-# 작업 완료 후, main 브랜치로 병합
-git checkout main
-git pull origin main
-git merge feature/social-login
-git push origin main
-```
-
-## 🐋 로컬에서 Docker 로 빌드하기 🐋
-
-1. Docker Desktop 실행
-2. Build 하기 전 spotless 적용 ```./gradlew spotlessApply```
-3. 정해진 컨벤션을 지키고 있는지 검사 (spotelesscheck) ```./gradlew spotlessCheck```
-4. spring boot build ```./gradlew build```
-5. Docker Desktop 실행중 인지 확인 ```docker info```
-6. Docker로 빌드하기 ```docker build -t "본인 dockerhub repo 이름"/helfoome . ```
-7. Docker Hub login(IDE terminal에서 실행) ```docker login```
-8. Docker Image Tag ```docker tag "본인 dockerhub repo 이름"/helfoome "본인 dockerhub repo 이름"/helfoome:latest```
-9. Docker Image Push ```docker push "본인 dockerhub repo 이름"/helfoome:latest```
-
-### 🐋 Docker 실행중인 컨테이너 중지하기 🐋
-1. 실행 중인 컨테이너 목록 확인 ```docker ps```
-2. 컨테이너 중지 실행 중인 컨테이너의 CONTAINER ID를 찾아서 중지. ```docker stop <CONTAINER ID>```
-3. 컨테이너의 삭제가 필요할 경우 ```docker rm <CONTAINER ID>```
-4. 이미지 삭제가 필요할 경우 ```docker rmi <IMAGE ID or IMAGE NAME>```
+1. issue를 등록한다.
+2. Branch Convention에 맞게 Branch를 생성한다.
+3. add - commit - push 의 과정을 거친다.
+4. Github에서 Pull Request를 작성해 생성하고, 해당 PR에 관한 리뷰를 요청한다.
+5. Approve를 받았다면, Merge를 진행한다.
+6. merge된 Branch를 삭제하거나 관리한다.
+7. 종료된 Issue와 Pull Request의 Label과 Project를 관리한다.
