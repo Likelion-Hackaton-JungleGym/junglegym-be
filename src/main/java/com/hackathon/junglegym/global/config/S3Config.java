@@ -36,8 +36,11 @@ public class S3Config {
   @Value("${cloud.aws.s3.path.politician}")
   private String politicianPath;
 
-  // @Value("${cloud.aws.s3.path.folder2}")
-  // private String folder2Path;
+  @Value("${cloud.aws.s3.path.media}")
+  private String mediaPath;
+
+  @Value("${cloud.aws.s3.path.background}")
+  private String backgroundPath;
 
   @PostConstruct
   public void init() {
