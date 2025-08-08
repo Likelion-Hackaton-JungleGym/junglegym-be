@@ -99,7 +99,8 @@ public class S3Service {
 
     return switch (pathName) {
           case POLITICIAN -> s3Config.getPoliticianPath();
-            // case FOLDER2 -> s3Config.getFolder2Path();
+          case MEDIA -> s3Config.getMediaPath();
+          case BACKGROUND -> s3Config.getBackgroundPath();
         }
         + '/'
         + UUID.randomUUID();
@@ -131,7 +132,8 @@ public class S3Service {
     String prefix =
         switch (pathName) {
           case POLITICIAN -> s3Config.getPoliticianPath();
-            // case FOLDER2 -> s3Config.getFolder2Path();
+          case MEDIA -> s3Config.getMediaPath();
+          case BACKGROUND -> s3Config.getBackgroundPath();
         };
 
     try {
@@ -152,7 +154,8 @@ public class S3Service {
     String prefix =
         switch (pathName) {
           case POLITICIAN -> s3Config.getPoliticianPath();
-            // case FOLDER2 -> s3Config.getFolder2Path();
+          case MEDIA -> s3Config.getMediaPath();
+          case BACKGROUND -> s3Config.getBackgroundPath();
         };
     String keyName = prefix + "/" + fileName;
     deleteFile(keyName);
