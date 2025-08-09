@@ -34,6 +34,6 @@ public class Question extends BaseTimeEntity {
   @Column(name = "answer", columnDefinition = "TEXT")
   private String answer; // AI 답변 (선택)
 
-  @Column(name = "constitution")
+  @Column(name = "constitution", columnDefinition = "TEXT")
   private String constitution; // 관련 헌법/법령 표기 (선택)
 }
