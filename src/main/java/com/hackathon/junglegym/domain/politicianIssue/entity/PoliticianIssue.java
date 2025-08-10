@@ -1,5 +1,6 @@
 package com.hackathon.junglegym.domain.politicianIssue.entity;
 
+import com.hackathon.junglegym.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +32,7 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE politician_issue SET is_deleted = true WHERE issue_id = ?")
 // 기본 조회는 is_deleted = false 인 행만
 @Where(clause = "is_deleted = false")
-public class PoliticianIssue {
+public class PoliticianIssue extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
