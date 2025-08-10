@@ -1,6 +1,5 @@
 package com.hackathon.junglegym.domain.politicianIssue.entity;
 
-import com.hackathon.junglegym.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +14,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.hackathon.junglegym.domain.politician.entity.Politician;
+import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
