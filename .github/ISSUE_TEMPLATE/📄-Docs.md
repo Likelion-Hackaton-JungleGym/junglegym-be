@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-## 📄 문서화 개요 (Documentation Overview)
+## 📄 문서화 개요
 
-Swagger 문서화 작업의 목적과 범위를 명시해주세요.
+- [ ] Swagger 문서화 작업의 목적과 범위를 명시해주세요.
 
-## 🔍 문서화할 항목 (Documentation Items)
+## 🔍 문서화할 항목
 
 - [ ] API 이름 및 설명
 - [ ] 엔드포인트 경로 (Endpoint URL)
@@ -21,10 +21,8 @@ Swagger 문서화 작업의 목적과 범위를 명시해주세요.
 - [ ] 인증 및 권한 (Authentication & Authorization)
 - [ ] 에러 코드 및 예외 처리 (Error Codes & Handling)
 
-## 📌 체크리스트 (Checklist)
+## 📌 체크리스트
 
 - [ ] 모든 필수 API 명세가 작성되었는지 확인함
 - [ ] Request와 Response의 데이터 형식이 정확히 기술되었음
 - [ ] Swagger UI에서 정상적으로 렌더링되는지 확인함
-
-## 📝 추가 정보 (Additional Information)

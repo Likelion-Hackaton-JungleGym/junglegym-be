@@ -7,19 +7,19 @@ assignees: ''
 
 ---
 
-## 🚀 기능 설명 (Feature Description)
+## ✨ 기능 설명
 
--
+- [ ] 기능 설명 1
 
-## 🔍 구현 상세 (Implementation Details)
+## 🔍 구현 상세
 
--
--
+- [ ] 구현 상세 1
+- [ ] 구현 상세 2
 
-### 📌 체크리스트 (Checklist)
+## 📌 체크리스트
 
 - [ ] 코드 로직에 대한 주석 작성을 완료함
 - [ ] 개발 내용에 대한 스웨거 문서화가 완료됨
 - [ ] Swagger로 정상적인 응답을 확인함
 
-### 📝 추가 정보 (Additional Information)
+## 📸 스크린샷 / 로그
