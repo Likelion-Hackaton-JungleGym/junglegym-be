@@ -81,15 +81,31 @@ public class QdrantService {
 
     Map<String, Object> payload = new LinkedHashMap<>();
     payload.put("law_name", c.getLawName());
-    if (c.getLawType() != null) payload.put("law_type", c.getLawType());
-    if (c.getPromulgationNo() != null) payload.put("promulgation_no", c.getPromulgationNo());
+    if (c.getLawType() != null) {
+      payload.put("law_type", c.getLawType());
+    }
+    if (c.getPromulgationNo() != null) {
+      payload.put("promulgation_no", c.getPromulgationNo());
+    }
     payload.put("revision_id", c.getRevisionId());
-    if (c.getSourceFileName() != null) payload.put("source_file", c.getSourceFileName());
-    if (c.getChapter() != null) payload.put("chapter", c.getChapter());
-    if (c.getChapterTitle() != null) payload.put("chapter_title", c.getChapterTitle());
-    if (c.getArticle() != null) payload.put("article", c.getArticle());
-    if (c.getArticleTitle() != null) payload.put("article_title", c.getArticleTitle());
-    if (c.getChunkIndex() != null) payload.put("chunk_index", c.getChunkIndex());
+    if (c.getSourceFileName() != null) {
+      payload.put("source_file", c.getSourceFileName());
+    }
+    if (c.getChapter() != null) {
+      payload.put("chapter", c.getChapter());
+    }
+    if (c.getChapterTitle() != null) {
+      payload.put("chapter_title", c.getChapterTitle());
+    }
+    if (c.getArticle() != null) {
+      payload.put("article", c.getArticle());
+    }
+    if (c.getArticleTitle() != null) {
+      payload.put("article_title", c.getArticleTitle());
+    }
+    if (c.getChunkIndex() != null) {
+      payload.put("chunk_index", c.getChunkIndex());
+    }
     payload.put("text", c.getText());
 
     Map<String, Object> point = new LinkedHashMap<>();
@@ -108,6 +124,7 @@ public class QdrantService {
   }
 
   public static class Hit {
+
     public final String lawName;
     public final Integer article;
     public final String articleTitle;
@@ -147,16 +164,22 @@ public class QdrantService {
       throw e;
     }
 
-    if (res == null) return List.of();
+    if (res == null) {
+      return List.of();
+    }
     Object resultObj = res.get("result");
-    if (!(resultObj instanceof List<?> list)) return List.of();
+    if (!(resultObj instanceof List<?> list)) {
+      return List.of();
+    }
 
     return list.stream()
         .map(
             item -> {
               Map<String, Object> r = (Map<String, Object>) item;
               Map<String, Object> p = (Map<String, Object>) r.get("payload");
-              if (p == null) p = Map.of();
+              if (p == null) {
+                p = Map.of();
+              }
 
               String lawName = (String) p.getOrDefault("law_name", "");
               Integer article = p.get("article") instanceof Number ar ? ar.intValue() : null;
@@ -183,16 +206,24 @@ public class QdrantService {
     String titlePart = (articleTitle == null || articleTitle.isBlank()) ? "" : " " + articleTitle;
     String base = "%s 제%d조%s".formatted(safe(lawName), article == null ? 0 : article, titlePart);
 
-    if (!includeSnippet) return base;
+    if (!includeSnippet) {
+      return base;
+    }
 
-    if (snippet == null || snippet.isBlank()) return base;
+    if (snippet == null || snippet.isBlank()) {
+      return base;
+    }
     String sn = cut(snippet.trim(), 180);
-    return base + " \"" + sn + "\"";
+    return base + "「" + sn + "」";
   }
 
   private static String cut(String s, int max) {
-    if (s == null) return null;
-    if (s.length() <= max) return s;
+    if (s == null) {
+      return null;
+    }
+    if (s.length() <= max) {
+      return s;
+    }
     return s.substring(0, max - 3) + "...";
   }
 
