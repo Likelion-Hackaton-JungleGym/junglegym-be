@@ -42,7 +42,7 @@ public class RegionController {
   }
 
   // 전체 조회
-  @Operation(summary = "[개발자] 지역 목록 조회", description = "지역 전체 조회")
+  @Operation(summary = "[개발자] 지역 목록 조회", description = "모든 지역 정보를 반환합니다. (200 ok)")
   @GetMapping
   public ResponseEntity<BaseResponse<List<RegionResponse>>> getAllRegion() {
     List<RegionResponse> list = regionService.getAllRegion();
@@ -50,7 +50,7 @@ public class RegionController {
   }
 
   // 수정
-  @Operation(summary = "[개발자] 특정 지역 이름 수정", description = "특정 지역 이름 수정")
+  @Operation(summary = "[개발자] 특정 지역 이름 수정", description = "수정할 지역명과 새로운 지역명을 입력받아 수정합니다.(200 ok)")
   @PatchMapping
   public ResponseEntity<BaseResponse<RegionResponse>> updateRegion(
       @Valid @RequestBody RegionUpdateRequest request) {
@@ -59,8 +59,8 @@ public class RegionController {
   }
 
   // 삭제
-  @Operation(summary = "[개발자] 특정 지역 삭제", description = "특정 지역 삭제")
-  @DeleteMapping("{name}")
+  @Operation(summary = "[개발자] 특정 지역 삭제", description = "삭제할 지역이름을 입력받고 해당 지역 데이터를 삭제합니다. (200 ok)")
+  @DeleteMapping("/{name}")
   public ResponseEntity<BaseResponse<String>> deleteRegion(
       @Parameter(description = "삭제할 지역명", example = "성북구") @PathVariable String name) {
     regionService.deleteRegion(name);
