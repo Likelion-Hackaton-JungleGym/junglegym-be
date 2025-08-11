@@ -46,12 +46,11 @@ public class QuestionService {
       answer = chat.answer(question, context, 700);
     }
 
-    // 5. DB 저장 (is_privated = false일 때만)
+    // 5. DB 저장 (privated = false일 때만)
     if (!request.isPrivated()) {
       try {
-        String constitution = stripSnippet(relatedLaw);
         Question q =
-            Question.builder().question(question).answer(answer).constitution(constitution).build();
+            Question.builder().question(question).answer(answer).constitution(relatedLaw).build();
         questionRepository.save(q);
       } catch (Exception e) {
         log.warn("질문/답변 저장 실패: {}", e.toString());
@@ -63,17 +62,6 @@ public class QuestionService {
         .answer(answer)
         .constitution(relatedLaw)
         .build();
-  }
-
-  private static String stripSnippet(String best) {
-    if (best == null) {
-      return null;
-    }
-    int idx = best.indexOf('"');
-    if (idx >= 0) {
-      return best.substring(0, idx).trim();
-    }
-    return best.trim();
   }
 
   public List<QuestionResponse> get10Chats() {
