@@ -1,19 +1,16 @@
 package com.hackathon.junglegym.domain.qeustion.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hackathon.junglegym.domain.qeustion.dto.request.QuestionRequest;
 import com.hackathon.junglegym.domain.qeustion.dto.response.QuestionResponse;
 import com.hackathon.junglegym.domain.qeustion.entity.Question;
 import com.hackathon.junglegym.domain.qeustion.mapper.QuestionMapper;
 import com.hackathon.junglegym.domain.qeustion.repository.QuestionRepository;
-
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +43,11 @@ public class QuestionService {
       answer = chat.answer(question, context, 700);
     }
 
-    // 5. DB 저장 (is_privated = false일 때만)
+    // 5. DB 저장 (privated = false일 때만)
     if (!request.isPrivated()) {
       try {
-        String constitution = stripSnippet(relatedLaw);
         Question q =
-            Question.builder().question(question).answer(answer).constitution(constitution).build();
+            Question.builder().question(question).answer(answer).constitution(relatedLaw).build();
         questionRepository.save(q);
       } catch (Exception e) {
         log.warn("질문/답변 저장 실패: {}", e.toString());
@@ -63,17 +59,6 @@ public class QuestionService {
         .answer(answer)
         .constitution(relatedLaw)
         .build();
-  }
-
-  private static String stripSnippet(String best) {
-    if (best == null) {
-      return null;
-    }
-    int idx = best.indexOf('"');
-    if (idx >= 0) {
-      return best.substring(0, idx).trim();
-    }
-    return best.trim();
   }
 
   public List<QuestionResponse> get10Chats() {

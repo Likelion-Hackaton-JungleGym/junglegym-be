@@ -20,5 +20,5 @@ public class QuestionRequest {
   private String question;
 
   @Schema(description = "비공개 여부(false면 DB에 저장)", example = "false")
-  private boolean isPrivated;
+  private boolean privated;
 }
