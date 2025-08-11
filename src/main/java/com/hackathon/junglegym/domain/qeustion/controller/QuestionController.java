@@ -1,8 +1,11 @@
 package com.hackathon.junglegym.domain.qeustion.controller;
 
+import java.util.List;
+
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +35,10 @@ public class QuestionController {
     QuestionResponse response = questionService.chat(request);
 
     return ResponseEntity.ok(BaseResponse.success("질문 성공", response));
+  }
+
+  @GetMapping("/chat")
+  public ResponseEntity<BaseResponse<List<QuestionResponse>>> get10Chats() {
+    return ResponseEntity.ok(BaseResponse.success(questionService.get10Chats()));
   }
 }

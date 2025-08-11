@@ -1,11 +1,15 @@
 package com.hackathon.junglegym.domain.qeustion.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hackathon.junglegym.domain.qeustion.dto.request.QuestionRequest;
 import com.hackathon.junglegym.domain.qeustion.dto.response.QuestionResponse;
 import com.hackathon.junglegym.domain.qeustion.entity.Question;
+import com.hackathon.junglegym.domain.qeustion.mapper.QuestionMapper;
 import com.hackathon.junglegym.domain.qeustion.repository.QuestionRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -62,9 +66,24 @@ public class QuestionService {
   }
 
   private static String stripSnippet(String best) {
-    if (best == null) return null;
+    if (best == null) {
+      return null;
+    }
     int idx = best.indexOf('"');
-    if (idx >= 0) return best.substring(0, idx).trim();
+    if (idx >= 0) {
+      return best.substring(0, idx).trim();
+    }
     return best.trim();
+  }
+
+  public List<QuestionResponse> get10Chats() {
+    List<Question> list = questionRepository.findTop10ByOrderByCreatedAtDesc();
+    List<QuestionResponse> questionResponseList = new ArrayList<>();
+    for (Question q : list) {
+      QuestionResponse response = QuestionMapper.toQuestionResponse(q);
+      questionResponseList.add(response);
+    }
+
+    return questionResponseList;
   }
 }
