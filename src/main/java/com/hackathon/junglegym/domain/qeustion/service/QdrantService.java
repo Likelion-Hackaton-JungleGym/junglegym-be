@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import jakarta.annotation.PostConstruct;
 
@@ -104,5 +105,98 @@ public class QdrantService {
         .retrieve()
         .bodyToMono(String.class)
         .block();
+  }
+
+  public static class Hit {
+    public final String lawName;
+    public final Integer article;
+    public final String articleTitle;
+    public final String snippet;
+    public final Double score;
+
+    public Hit(String lawName, Integer article, String articleTitle, String snippet, Double score) {
+      this.lawName = lawName;
+      this.article = article;
+      this.articleTitle = articleTitle;
+      this.snippet = snippet;
+      this.score = score;
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<String> searchSimilar(float[] queryVector, int limit, boolean includeSnippet) {
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("vector", queryVector);
+    body.put("limit", limit);
+    body.put("with_payload", true);
+    body.put("with_vectors", false);
+
+    Map<?, ?> res;
+    try {
+      res =
+          client
+              .post()
+              .uri("/collections/{c}/points/search", collection)
+              .bodyValue(body)
+              .retrieve()
+              .bodyToMono(Map.class)
+              .block();
+    } catch (WebClientResponseException e) {
+      log.error(
+          "Qdrant search failed ({}): {}", e.getStatusCode().value(), e.getResponseBodyAsString());
+      throw e;
+    }
+
+    if (res == null) return List.of();
+    Object resultObj = res.get("result");
+    if (!(resultObj instanceof List<?> list)) return List.of();
+
+    return list.stream()
+        .map(
+            item -> {
+              Map<String, Object> r = (Map<String, Object>) item;
+              Map<String, Object> p = (Map<String, Object>) r.get("payload");
+              if (p == null) p = Map.of();
+
+              String lawName = (String) p.getOrDefault("law_name", "");
+              Integer article = p.get("article") instanceof Number ar ? ar.intValue() : null;
+              String title = (String) p.getOrDefault("article_title", "");
+              String text = (String) p.getOrDefault("text", "");
+
+              return formateRelatedLawString(lawName, article, title, text, includeSnippet);
+            })
+        .collect(Collectors.toList());
+  }
+
+  public String searchTop1(float[] queryVector) {
+    List<String> list = searchSimilar(queryVector, 5, true);
+    return list.isEmpty() ? null : list.getFirst();
+  }
+
+  private static String formateRelatedLawString(
+      String lawName,
+      Integer article,
+      String articleTitle,
+      String snippet,
+      boolean includeSnippet) {
+
+    String titlePart = (articleTitle == null || articleTitle.isBlank()) ? "" : " " + articleTitle;
+    String base = "%s 제%d조%s".formatted(safe(lawName), article == null ? 0 : article, titlePart);
+
+    if (!includeSnippet) return base;
+
+    if (snippet == null || snippet.isBlank()) return base;
+    String sn = cut(snippet.trim(), 180);
+    return base + " \"" + sn + "\"";
+  }
+
+  private static String cut(String s, int max) {
+    if (s == null) return null;
+    if (s.length() <= max) return s;
+    return s.substring(0, max - 3) + "...";
+  }
+
+  private static String safe(String s) {
+    return s == null ? "" : s;
   }
 }
