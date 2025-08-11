@@ -57,6 +57,11 @@ dependencies {
     // Apache for pdf parsing
     implementation 'org.apache.pdfbox:pdfbox:2.0.30'
 
+    // MacOS ARM64(M1/M2) 전용 Netty DNS 네이티브 라이브러리
+    runtimeOnly(group: "io.netty",
+            name: "netty-resolver-dns-native-macos",
+            classifier: "osx-aarch_64")
+
 }
 
 tasks.named('compileJava') {
