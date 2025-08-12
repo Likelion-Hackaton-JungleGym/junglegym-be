@@ -30,4 +30,8 @@ public class Region extends BaseTimeEntity {
 
   @Column(name = "name")
   private String name; // 지역명 예) 성북구
+
+  public void update(String name) {
+    this.name = name;
+  }
 }
