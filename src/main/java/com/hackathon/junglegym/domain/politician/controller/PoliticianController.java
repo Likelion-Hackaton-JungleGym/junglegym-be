@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class PoliticianController {
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(BaseResponse.success("정치인 등록 성공", response));
   }
+
   //
   //  // 전체 조회
   //  @Operation(summary = "[개발자] 정치인 목록 조회", description = "데이터베이스에 등록된 모든 정치인들을 조회합니다. (200 ok)")
@@ -67,7 +69,7 @@ public class PoliticianController {
   //  // 수정
   //  @Operation(
   //      summary = "[개발자] 특정 정치인 데이터 수정",
-  //      description = "정치인 이름을 입력받고, 해당 정치인의 데이터를 수정합니다. (200 ok)")
+  //      description = "이름과 지역명을 입력받고, 해당 정치인의 데이터를 수정합니다. (200 ok)")
   //  @PatchMapping
   //  public ResponseEntity<BaseResponse<PoliticianResponse>> updatePolitician(
   //      @Valid @RequestBody PoliticianUpdateRequest request) {
@@ -75,12 +77,15 @@ public class PoliticianController {
   //    return ResponseEntity.ok(BaseResponse.success("정치인 수정 완료", response));
   //  }
   //
-  //  // 삭제
-  //  @Operation(summary = "[개발자] 특정 정치인 삭제", description = "입력받은 정치인 데이터를 삭제합니다. (200 ok)")
-  //  @DeleteMapping("/{name}")
-  //  public ResponseEntity<BaseResponse<String>> deletePolitician(
-  //      @Parameter(description = "삭제할 정치인 이름", example = "김영배") @PathVariable String name) {
-  //    politicianService.deletePolitician(name);
-  //    return ResponseEntity.ok(BaseResponse.success("정치인 삭제 완료"));
-  //  }
+  // 삭제
+  @Operation(
+      summary = "[개발자] 특정 정치인 삭제",
+      description = "이름과 지역명을 입력받고, 해당 정치인 데이터를 삭제합니다. (200 ok)")
+  @DeleteMapping
+  public ResponseEntity<BaseResponse<String>> deletePolitician(
+      @Parameter(description = "삭제할 정치인 이름", example = "김영배") @Valid @RequestBody String name,
+      @Parameter(description = "지역명", example = "성북구") @Valid @RequestBody String regionName) {
+    politicianService.deletePolitician(name, regionName);
+    return ResponseEntity.ok(BaseResponse.success("정치인 삭제 완료"));
+  }
 }
