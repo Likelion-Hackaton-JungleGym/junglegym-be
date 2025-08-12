@@ -1,6 +1,7 @@
 package com.hackathon.junglegym.domain.politician.dto.response;
 
 import com.hackathon.junglegym.domain.politician.entity.Role;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -55,5 +56,4 @@ public class PoliticianResponse {
 
   @Schema(description = "관할 지역", example = "성북동, 삼선동, 동선동, 돈암제2동, 안암동, 보문동, 정릉동, 길음제1동")
   private String regionText;
-
 }

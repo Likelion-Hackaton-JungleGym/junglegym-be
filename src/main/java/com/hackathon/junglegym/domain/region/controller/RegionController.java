@@ -1,16 +1,9 @@
 package com.hackathon.junglegym.domain.region.controller;
 
-import com.hackathon.junglegym.domain.region.dto.request.RegionRequest;
-import com.hackathon.junglegym.domain.region.dto.request.RegionUpdateRequest;
-import com.hackathon.junglegym.domain.region.dto.response.RegionResponse;
-import com.hackathon.junglegym.domain.region.service.RegionService;
-import com.hackathon.junglegym.global.response.BaseResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.hackathon.junglegym.domain.region.dto.request.RegionRequest;
+import com.hackathon.junglegym.domain.region.dto.request.RegionUpdateRequest;
+import com.hackathon.junglegym.domain.region.dto.response.RegionResponse;
+import com.hackathon.junglegym.domain.region.service.RegionService;
+import com.hackathon.junglegym.global.response.BaseResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/dev/region")
@@ -35,7 +39,7 @@ public class RegionController {
   @PostMapping
   public ResponseEntity<BaseResponse<RegionResponse>> createRegion(
       @Parameter(description = "생성할 지역명", example = "성북구") @Valid @RequestBody
-      RegionRequest request) {
+          RegionRequest request) {
     RegionResponse response = regionService.createRegion(request);
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(BaseResponse.success("지역 등록 성공", response));

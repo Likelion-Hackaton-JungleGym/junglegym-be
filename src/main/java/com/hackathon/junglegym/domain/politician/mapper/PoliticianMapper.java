@@ -1,10 +1,11 @@
 package com.hackathon.junglegym.domain.politician.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
 import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.domain.region.entity.Region;
-import org.springframework.stereotype.Component;
 
 @Component
 public class PoliticianMapper {

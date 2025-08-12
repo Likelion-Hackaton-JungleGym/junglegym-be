@@ -1,9 +1,11 @@
 package com.hackathon.junglegym.domain.politician.exception;
 
+import org.springframework.http.HttpStatus;
+
 import com.hackathon.junglegym.global.exception.model.BaseErrorCode;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
