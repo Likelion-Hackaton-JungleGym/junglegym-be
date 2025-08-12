@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.hackathon.junglegym.domain.politician.entity.Politician;
+import com.hackathon.junglegym.domain.region.entity.Region;
 
 public interface PoliticianRepository extends JpaRepository<Politician, Long> {
 
@@ -13,5 +14,5 @@ public interface PoliticianRepository extends JpaRepository<Politician, Long> {
 
   List<Politician> findAllByRegion_Name(String regionName);
 
-  Optional<Politician> findByName(String name);
+  Optional<Politician> findByNameAndRegion(String name, Region region);
 }

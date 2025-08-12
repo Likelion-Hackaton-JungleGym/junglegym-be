@@ -46,7 +46,6 @@ public class PoliticianInfoSync {
         if (guName.get().equals(region.getName())) {
           if (savePolitician(row, region)) {
             saved++;
-            System.out.println("정치인 저장 성공");
           }
         }
       }
@@ -62,7 +61,9 @@ public class PoliticianInfoSync {
     }
 
     Politician politician =
-        politicianRepository.findByName(pName).orElse(Politician.builder().name(pName).build());
+        politicianRepository
+            .findByNameAndRegion(pName, region)
+            .orElse(Politician.builder().name(pName).build());
 
     String name = openApi.text(n, "HG_NM");
     String polyName = openApi.text(n, "POLY_NM");
@@ -78,7 +79,7 @@ public class PoliticianInfoSync {
 
     politicianRepository.save(politician);
 
-    log.info("[정치인 정보 크롤링 및 업데이트 완료]");
+    log.info("정치인 정보 크롤링 및 업데이트 완료, name: {} region: {}", name, region.getName());
 
     return true;
   }

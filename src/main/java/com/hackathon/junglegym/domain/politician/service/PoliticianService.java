@@ -41,6 +41,7 @@ public class PoliticianService {
     Politician politician = politicianMapper.toPolitician(request, region);
     return politicianMapper.toPoliticianResponse(politicianRepository.save(politician));
   }
+
   //
   //  // 전체 조회
   //  public List<PoliticianResponse> getAllPolitician() {
@@ -56,6 +57,20 @@ public class PoliticianService {
   //  // 수정
   //  public PoliticianResponse updatePolitician(PoliticianUpdateRequest updateRequest) {}
   //
-  //  // 삭제
-  //  public void deletePolitician(String name) {}
+  // 삭제
+  public void deletePolitician(String name, String regionName) {
+    Region region =
+        regionRepository
+            .findByName(regionName)
+            .orElseThrow(() -> new CustomException(RegionErrorCode.REGION_NOT_FOUND));
+
+    Politician politician =
+        politicianRepository
+            .findByNameAndRegion(name, region)
+            .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    politicianRepository.delete(politician);
+
+    log.info("[정치인 삭제] 이름: {}, 지역: {}", name, regionName);
+  }
 }
