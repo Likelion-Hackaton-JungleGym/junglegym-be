@@ -56,7 +56,7 @@ public class RegionService {
 
     region.update(updateRequest.getNewName());
 
-    log.info("[지역명 수정 - 수정 전: {}, 수정 후: {}", updateRequest.getName(), updateRequest.getNewName());
+    log.info("[지역명 수정 - 수정 전: {}, 수정 후: {}]", updateRequest.getName(), updateRequest.getNewName());
 
     return regionMapper.toRegionResponse(region);
   }
