@@ -37,8 +37,7 @@ public class IngestController {
           description = "PDF 파일들",
           content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
       @RequestPart("files")
-      List<MultipartFile> files)
-      throws IOException {
+      List<MultipartFile> files) throws IOException {
 
     List<IngestResult> results = new ArrayList<>();
     for (MultipartFile file : files) {
