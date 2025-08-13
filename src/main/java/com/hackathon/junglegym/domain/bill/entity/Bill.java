@@ -42,6 +42,12 @@ public class Bill extends BaseTimeEntity {
   @Column(name = "name")
   private String name; // 법률안 명
 
+  @Column(name = "main_content", columnDefinition = "TEXT")
+  private String mainContent; // 주요 내용
+
+  @Column(name = "summary_content", columnDefinition = "TEXT")
+  private String summaryContent; // 내용 요약
+
   @Column(name = "propose_date")
   private LocalDate proposeDate; // 발의일 (yyyy-MM-dd)
 

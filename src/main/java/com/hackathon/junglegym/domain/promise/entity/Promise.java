@@ -42,28 +42,10 @@ public class Promise extends BaseTimeEntity {
   @Column(name = "name")
   private String name; // 공약명
 
-  @Column(name = "content", columnDefinition = "TEXT") // 길이 제한 X
-  private String content; // 공약 내용
-
   @Enumerated(EnumType.STRING)
   @Column(name = "progress", length = 50)
   private PromiseProgress progress; // 진행상황
 
-  @Column(name = "status_summary", columnDefinition = "TEXT")
-  private String statusSummary; // 공약 사업 관련 현황
-
   @Column(name = "goal", columnDefinition = "TEXT")
   private String goal; // 정책 목표
-
-  @Column(name = "outline", columnDefinition = "TEXT")
-  private String outline; // 추진 개요
-
-  @Column(name = "status", columnDefinition = "TEXT")
-  private String status; // 추진 결과
-
-  @Column(name = "effect", columnDefinition = "TEXT")
-  private String effect; // 기대 효과
-
-  @Column(name = "plan", columnDefinition = "TEXT")
-  private String plan; // 향후 추진 계획
 }

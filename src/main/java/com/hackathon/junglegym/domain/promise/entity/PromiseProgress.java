@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PromiseProgress {
   IN_PROGRESS("정상추진"),
+  IN_PROGRESS_PARTIAL("일부추진"),
   DONE("완료"),
   ONGOING("이행 후 계속 추진"),
   ON_HOLD("보류"),
