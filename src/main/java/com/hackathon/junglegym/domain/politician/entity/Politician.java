@@ -77,4 +77,26 @@ public class Politician extends BaseTimeEntity {
   // 관할 지역(표기용 텍스트): 예) 성북동, 삼선동, 동선동, 돈암제2동, 안암동, 보문동, 정릉제1동 ...
   @Column(name = "region_text")
   private String regionText;
+
+  public void updatePolitician(
+      String name,
+      String polyName,
+      String committee,
+      String birth,
+      String retryUnit,
+      Integer retryNumber,
+      String careerSummary,
+      String roleName,
+      Region region) {
+    this.name = name;
+    this.polyName = polyName;
+    this.committee = committee;
+    this.birth = birth;
+    this.retryUnit = retryUnit;
+    this.retryNumber = retryNumber;
+    this.careerSummary = careerSummary;
+    this.roleName = roleName;
+    this.region = region;
+    this.role = Role.NATIONAL_ASSEMBLY;
+  }
 }
