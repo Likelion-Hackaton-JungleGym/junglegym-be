@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "poromise_category")
+@Table(name = "promise_category")
 public class PromiseCategory extends BaseTimeEntity {
 
   @Id
@@ -37,6 +37,9 @@ public class PromiseCategory extends BaseTimeEntity {
   @JoinColumn(name = "politician_id", nullable = false) // DB 레벨 null 방지
   private Politician politician;
 
-  @Column(name = "category")
-  private String category; // 공약 분야 텍스트
+  @Column(name = "title")
+  private String title; // 공약 분야 제목
+
+  @Column(name = "content")
+  private String content; // 공약 분야 텍스트
 }

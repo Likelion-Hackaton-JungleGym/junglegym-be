@@ -2,6 +2,8 @@ package com.hackathon.junglegym.domain.homepage.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,4 +41,8 @@ public class Homepage extends BaseTimeEntity {
 
   @Column(name = "link")
   private String link; // 홈페이지 주소
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "link_type", nullable = false)
+  private LinkType linkType;
 }
