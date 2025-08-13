@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/admin/ingest")
+@RequestMapping("/api/dev/ingest")
 @RequiredArgsConstructor
 @Tag(name = "Ingest", description = "PDF 업로드 인제스트용 api")
 public class IngestController {
