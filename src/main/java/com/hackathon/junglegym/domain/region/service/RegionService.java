@@ -1,10 +1,5 @@
 package com.hackathon.junglegym.domain.region.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.hackathon.junglegym.domain.region.dto.request.RegionRequest;
 import com.hackathon.junglegym.domain.region.dto.request.RegionUpdateRequest;
 import com.hackathon.junglegym.domain.region.dto.response.RegionResponse;
@@ -13,9 +8,11 @@ import com.hackathon.junglegym.domain.region.exception.RegionErrorCode;
 import com.hackathon.junglegym.domain.region.mapper.RegionMapper;
 import com.hackathon.junglegym.domain.region.repository.RegionRepository;
 import com.hackathon.junglegym.global.exception.CustomException;
-
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +53,7 @@ public class RegionService {
 
     region.update(updateRequest.getNewName());
 
-    log.info("[지역명 수정 - 수정 전: {}, 수정 후: {}", updateRequest.getName(), updateRequest.getNewName());
+    log.info("[지역명 수정 - 수정 전: {}, 수정 후: {}]", updateRequest.getName(), updateRequest.getNewName());
 
     return regionMapper.toRegionResponse(region);
   }
