@@ -16,6 +16,8 @@ public class BillMapper {
         bill.getId(),
         bill.getName(),
         bill.getMainContent(),
+        bill.getSummaryContent(),
+        bill.getResult(),
         bill.getProposeDate(),
         bill.getMainProposer(),
         bill.getJoinProposer(),
