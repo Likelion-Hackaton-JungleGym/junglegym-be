@@ -60,7 +60,7 @@ public class PoliticianController {
 
   // 특정 지역 정치인들 조회
   @Operation(summary = "특정 지역 정치인 목록 조회", description = "특정 지역의 정치인들을 조회합니다. (200 ok)")
-  @GetMapping("/politician/list")
+  @GetMapping("/regions/politicians")
   public ResponseEntity<BaseResponse<List<PoliticianByRegionResponse>>> getAllPoliticianByRegion(
       @Parameter(description = "지역명", example = "성북구")
       @RequestParam(value = "regionName", defaultValue = "성북구")
@@ -71,10 +71,10 @@ public class PoliticianController {
 
   // 단일 조회
   @Operation(summary = "특정 정치인 조회", description = "특정 정치인의 세부정보를 조회합니다 (200 ok)")
-  @GetMapping("/politician/{id}")
+  @GetMapping("/politician/{politicianId}")
   public ResponseEntity<BaseResponse<PoliticianResponse>> getPoliticianById(
-      @Parameter(description = "조회할 정치인 고유번호", example = "1") @PathVariable Long id) {
-    PoliticianResponse response = politicianService.getPoliticianById(id);
+      @Parameter(description = "조회할 정치인 고유번호", example = "1") @PathVariable Long politicianId) {
+    PoliticianResponse response = politicianService.getPoliticianById(politicianId);
     return ResponseEntity.ok(BaseResponse.success("특정 정치인 조회 성공", response));
   }
 
