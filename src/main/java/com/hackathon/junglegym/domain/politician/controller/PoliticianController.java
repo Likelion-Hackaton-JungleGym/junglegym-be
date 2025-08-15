@@ -1,9 +1,21 @@
 package com.hackathon.junglegym.domain.politician.controller;
 
-import java.util.List;
-
+import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
+import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
+import com.hackathon.junglegym.domain.politician.service.PoliticianService;
+import com.hackathon.junglegym.global.response.BaseResponse;
+import com.hackathon.junglegym.global.s3.dto.S3Response;
+import com.hackathon.junglegym.global.s3.entity.PathName;
+import com.hackathon.junglegym.global.s3.service.S3Service;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
-import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
-import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
-import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
-import com.hackathon.junglegym.domain.politician.service.PoliticianService;
-import com.hackathon.junglegym.global.response.BaseResponse;
-import com.hackathon.junglegym.global.s3.dto.S3Response;
-import com.hackathon.junglegym.global.s3.entity.PathName;
-import com.hackathon.junglegym.global.s3.service.S3Service;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
@@ -64,11 +60,13 @@ public class PoliticianController {
 
   // 특정 지역 정치인들 조회
   @Operation(summary = "특정 지역 정치인 목록 조회", description = "특정 지역의 정치인들을 조회합니다. (200 ok)")
-  @GetMapping("/politician/{regionName}/list")
+  @GetMapping("/politician/list")
   public ResponseEntity<BaseResponse<List<PoliticianByRegionResponse>>> getAllPoliticianByRegion(
-      @Parameter(description = "지역명", example = "성북구") @PathVariable String regionName) {
+      @Parameter(description = "지역명", example = "성북구")
+      @RequestParam(value = "regionName", defaultValue = "성북구")
+      String regionName) {
     List<PoliticianByRegionResponse> list = politicianService.getAllPoliticianByRegion(regionName);
-    return ResponseEntity.ok(BaseResponse.success("전체 지역 목록 조회 성공", list));
+    return ResponseEntity.ok(BaseResponse.success("특정 지역 정치인 목록 조회 성공", list));
   }
 
   // 단일 조회
@@ -112,13 +110,13 @@ public class PoliticianController {
   public ResponseEntity<BaseResponse<PoliticianResponse>> createPoliticianImg(
       @Parameter(description = "정치인 이름", example = "김영배") @Valid @RequestParam("name") String name,
       @Parameter(description = "정치인 지역명", example = "성북구") @Valid @RequestParam("regionName")
-          String regionName,
+      String regionName,
       @Parameter(
-              description = "정치인 사진",
-              content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
-          @Valid
-          @RequestPart("file")
-          MultipartFile file) {
+          description = "정치인 사진",
+          content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+      @Valid
+      @RequestPart("file")
+      MultipartFile file) {
     S3Response imgUrl = s3Service.uploadImage(PathName.POLITICIAN, file);
     PoliticianResponse response = politicianService.createPoliticianImg(name, regionName, imgUrl);
     return ResponseEntity.status(HttpStatus.CREATED)
