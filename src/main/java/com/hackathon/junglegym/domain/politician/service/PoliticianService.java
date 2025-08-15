@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
 import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.domain.politician.exception.PoliticianErrorCode;
@@ -60,12 +61,12 @@ public class PoliticianService {
   }
 
   // 지역별 전체 조회
-  public List<PoliticianResponse> getAllPoliticianByRegion(String regionName) {
+  public List<PoliticianByRegionResponse> getAllPoliticianByRegion(String regionName) {
     List<Politician> politicianList = politicianRepository.findAllByRegion_Name(regionName);
-    List<PoliticianResponse> responseList = new ArrayList<>();
+    List<PoliticianByRegionResponse> responseList = new ArrayList<>();
 
     for (Politician p : politicianList) {
-      responseList.add(politicianMapper.toPoliticianResponse(p));
+      responseList.add(politicianMapper.toPoliticianByRegionResponse(p));
     }
 
     return responseList;

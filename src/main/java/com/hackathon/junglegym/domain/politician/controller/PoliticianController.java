@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
 import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
 import com.hackathon.junglegym.domain.politician.service.PoliticianService;
 import com.hackathon.junglegym.global.response.BaseResponse;
@@ -64,9 +65,9 @@ public class PoliticianController {
   // 특정 지역 정치인들 조회
   @Operation(summary = "특정 지역 정치인 목록 조회", description = "특정 지역의 정치인들을 조회합니다. (200 ok)")
   @GetMapping("/politician/{regionName}/list")
-  public ResponseEntity<BaseResponse<List<PoliticianResponse>>> getAllPoliticianByRegion(
+  public ResponseEntity<BaseResponse<List<PoliticianByRegionResponse>>> getAllPoliticianByRegion(
       @Parameter(description = "지역명", example = "성북구") @PathVariable String regionName) {
-    List<PoliticianResponse> list = politicianService.getAllPoliticianByRegion(regionName);
+    List<PoliticianByRegionResponse> list = politicianService.getAllPoliticianByRegion(regionName);
     return ResponseEntity.ok(BaseResponse.success("전체 지역 목록 조회 성공", list));
   }
 
