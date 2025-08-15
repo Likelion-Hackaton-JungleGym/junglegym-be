@@ -15,4 +15,6 @@ public interface PoliticianRepository extends JpaRepository<Politician, Long> {
   List<Politician> findAllByRegion_Name(String regionName);
 
   Optional<Politician> findByNameAndRegion(String name, Region region);
+
+  boolean existsById(Long id);
 }
