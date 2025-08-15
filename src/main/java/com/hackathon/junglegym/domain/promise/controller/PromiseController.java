@@ -26,7 +26,7 @@ public class PromiseController {
   private final PromiseService promiseService;
 
   @Operation(summary = "정치인 공약 이행 현황 요약", description = "총계, 상태별 개수/비율, 소계, 업데이트 기준일을 반환합니다.")
-  @GetMapping("/{politicianId}/promises/summary")
+  @GetMapping("/politicians/{politicianId}/promises/summary")
   public ResponseEntity<BaseResponse<PromiseProgressSummaryResponse>> getSummaryByPolitician(
       @PathVariable Long politicianId) {
     PromiseProgressSummaryResponse response =
@@ -35,7 +35,7 @@ public class PromiseController {
   }
 
   @Operation(summary = "공약 카테고리 상세 공약 목록", description = "카테고리를 선택하면 공약명/진행상황/공약ID/공약목표를 반환합니다.")
-  @GetMapping("/promise-categories/{categoryId}/promises")
+  @GetMapping("/categories/{categoryId}/promises")
   public ResponseEntity<BaseResponse<List<PromiseResponse>>> getPromisesByCategory(
       @PathVariable Long categoryId) {
 
