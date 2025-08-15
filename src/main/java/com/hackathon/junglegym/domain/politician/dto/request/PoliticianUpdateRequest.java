@@ -30,7 +30,10 @@ public class PoliticianUpdateRequest {
   @Schema(description = "정당 이름", example = "더불어민주당")
   private String polyName;
 
-  @Schema(description = "역할", example = "NATIONAL_ASSEMBLY(국회의원)")
+  @Schema(
+      description = "역할",
+      example = "NATIONAL_ASSEMBLY(국회의원)",
+      allowableValues = {"NATIONAL_ASSEMBLY", "MAYOR_PROVINCIAL", "MAYOR_MUNICIPAL"})
   private Role role;
 
   @Schema(description = "소속 위원", example = "외교통일위원회")
