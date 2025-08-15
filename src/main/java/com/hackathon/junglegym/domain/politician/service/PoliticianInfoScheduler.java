@@ -14,7 +14,7 @@ public class PoliticianInfoScheduler {
   public final PoliticianInfoSync svc;
 
   // 매주 일요일 0시에 실행
-  @Scheduled(cron = "0 30 22 ? * 2", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 11 16 ? * 5", zone = "Asia/Seoul")
   public void politicianInfo() {
     try {
       int n = svc.syncAllByRegions();

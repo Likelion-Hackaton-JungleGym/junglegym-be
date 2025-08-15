@@ -41,7 +41,6 @@ public class PoliticianMapper {
         .birth(request.getBirth())
         .retryNumber(request.getRetryNumber())
         .retryUnit(request.getRetryUnit())
-        .profileImg(request.getProfileImg())
         .careerSummary(request.getCareerSummary())
         .military(request.getMilitary())
         .roleName(request.getRoleName())
