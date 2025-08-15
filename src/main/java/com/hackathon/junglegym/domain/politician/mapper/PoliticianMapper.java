@@ -3,6 +3,7 @@ package com.hackathon.junglegym.domain.politician.mapper;
 import org.springframework.stereotype.Component;
 
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
 import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.domain.region.entity.Region;
@@ -41,11 +42,22 @@ public class PoliticianMapper {
         .birth(request.getBirth())
         .retryNumber(request.getRetryNumber())
         .retryUnit(request.getRetryUnit())
-        .profileImg(request.getProfileImg())
         .careerSummary(request.getCareerSummary())
         .military(request.getMilitary())
         .roleName(request.getRoleName())
         .regionText(request.getRegionText())
+        .build();
+  }
+
+  public PoliticianByRegionResponse toPoliticianByRegionResponse(Politician politician) {
+    return PoliticianByRegionResponse.builder()
+        .id(politician.getId())
+        .regionName(politician.getRegion().getName())
+        .name(politician.getName())
+        .polyName(politician.getPolyName())
+        .role(politician.getRole())
+        .profileImg(politician.getProfileImg())
+        .roleName(politician.getRoleName())
         .build();
   }
 }

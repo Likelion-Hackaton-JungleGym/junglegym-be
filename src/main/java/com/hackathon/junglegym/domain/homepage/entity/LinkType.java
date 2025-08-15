@@ -6,5 +6,6 @@ public enum LinkType {
   FACEBOOK,
   TWITTER,
   YOUTUBE,
-  HOMEPAGE
+  HOMEPAGE,
+  FINELINK
 }

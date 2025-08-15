@@ -1,9 +1,14 @@
 package com.hackathon.junglegym.domain.politician.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hackathon.junglegym.domain.politician.dto.request.PoliticianRequest;
+import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
+import com.hackathon.junglegym.domain.politician.dto.response.PoliticianByRegionResponse;
 import com.hackathon.junglegym.domain.politician.dto.response.PoliticianResponse;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.domain.politician.exception.PoliticianErrorCode;
@@ -13,6 +18,7 @@ import com.hackathon.junglegym.domain.region.entity.Region;
 import com.hackathon.junglegym.domain.region.exception.RegionErrorCode;
 import com.hackathon.junglegym.domain.region.repository.RegionRepository;
 import com.hackathon.junglegym.global.exception.CustomException;
+import com.hackathon.junglegym.global.s3.dto.S3Response;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,21 +48,66 @@ public class PoliticianService {
     return politicianMapper.toPoliticianResponse(politicianRepository.save(politician));
   }
 
-  //
-  //  // 전체 조회
-  //  public List<PoliticianResponse> getAllPolitician() {
-  //    List<Politician> politicianList = politicianRepository.findAll();
-  //  }
-  //
-  //  // 지역별 전체 조회
-  //  public List<PoliticianResponse> getAllPoliticianByRegion(String regionName) {}
-  //
-  //  // 단일 조회
-  //  public PoliticianResponse getPoliticianById(Long id) {}
-  //
-  //  // 수정
-  //  public PoliticianResponse updatePolitician(PoliticianUpdateRequest updateRequest) {}
-  //
+  // 전체 조회
+  public List<PoliticianResponse> getAllPolitician() {
+    List<Politician> politicianList = politicianRepository.findAll();
+    List<PoliticianResponse> responseList = new ArrayList<>();
+
+    for (Politician p : politicianList) {
+      responseList.add(politicianMapper.toPoliticianResponse(p));
+    }
+
+    return responseList;
+  }
+
+  // 지역별 전체 조회
+  public List<PoliticianByRegionResponse> getAllPoliticianByRegion(String regionName) {
+    List<Politician> politicianList = politicianRepository.findAllByRegion_Name(regionName);
+    List<PoliticianByRegionResponse> responseList = new ArrayList<>();
+
+    for (Politician p : politicianList) {
+      responseList.add(politicianMapper.toPoliticianByRegionResponse(p));
+    }
+
+    return responseList;
+  }
+
+  // 단일 조회
+  public PoliticianResponse getPoliticianById(Long id) {
+    Politician politician =
+        politicianRepository
+            .findById(id)
+            .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    return (politicianMapper.toPoliticianResponse(politician));
+  }
+
+  // 수정
+  public PoliticianResponse updatePolitician(PoliticianUpdateRequest updateRequest) {
+    Region region =
+        regionRepository
+            .findByName(updateRequest.getRegionName())
+            .orElseThrow(() -> new CustomException(RegionErrorCode.REGION_NOT_FOUND));
+
+    Politician politician =
+        politicianRepository
+            .findByNameAndRegion(updateRequest.getName(), region)
+            .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    if (updateRequest.getUpdateRegionName() != null) {
+      Region newRegion =
+          regionRepository
+              .findByName(updateRequest.getUpdateRegionName())
+              .orElseThrow(() -> new CustomException(RegionErrorCode.REGION_NOT_FOUND));
+
+      politician.updatePolitician(updateRequest, newRegion);
+    } else {
+      politician.updatePolitician(updateRequest);
+    }
+
+    return (politicianMapper.toPoliticianResponse(politician));
+  }
+
   // 삭제
   public void deletePolitician(String name, String regionName) {
     Region region =
@@ -72,5 +123,21 @@ public class PoliticianService {
     politicianRepository.delete(politician);
 
     log.info("[정치인 삭제] 이름: {}, 지역: {}", name, regionName);
+  }
+
+  public PoliticianResponse createPoliticianImg(String name, String regionName, S3Response imgUrl) {
+    Region region =
+        regionRepository
+            .findByName(regionName)
+            .orElseThrow(() -> new CustomException(RegionErrorCode.REGION_NOT_FOUND));
+
+    Politician politician =
+        politicianRepository
+            .findByNameAndRegion(name, region)
+            .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    politician.updateImgUrl(imgUrl.getImageUrl());
+
+    return (politicianMapper.toPoliticianResponse(politician));
   }
 }
