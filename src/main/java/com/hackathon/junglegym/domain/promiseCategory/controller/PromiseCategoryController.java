@@ -27,7 +27,7 @@ public class PromiseCategoryController {
   @Operation(
       summary = "정치인 공약 카테고리 목록",
       description = "정치인을 선택하면 해당 정치인이 내건 공약 카테고리의 제목/내용 목록을 반환합니다.")
-  @GetMapping("/{politicianId}/promises/categories")
+  @GetMapping("/politicians/{politicianId}/promises/categories")
   public ResponseEntity<BaseResponse<List<PromiseCategoryResponse>>> getCategoriesByPolitician(
       @PathVariable Long politicianId) {
 
