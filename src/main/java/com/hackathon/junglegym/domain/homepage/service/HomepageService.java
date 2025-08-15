@@ -47,7 +47,7 @@ public class HomepageService {
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
 
     // 같은 정치인 + 같은 링크타입은 1건만 허용
-    if (homepageRepository.existsByPoliticianAndLinkType(politician, request.getLinkType())) {
+    if (homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType()) != null) {
       throw new CustomException(HomepageErrorCode.HOMEPAGE_TYPE_ALREADY_EXISTS);
     }
 
@@ -58,6 +58,11 @@ public class HomepageService {
 
   // 전체 조회
   public List<HomepageResponse> getAllHomepage(Long politicianId) {
+    Politician politician =
+        politicianRepository
+            .findById(politicianId)
+            .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
     List<Homepage> homepages = homepageRepository.findAllByPolitician_Id(politicianId);
     return homepages.stream().map(homepageMapper::toHomepageResponse).toList();
   }
@@ -74,6 +79,10 @@ public class HomepageService {
         politicianRepository
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    if (homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType()) == null) {
+      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
+    }
 
     Homepage homepage =
         homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType());
@@ -95,6 +104,10 @@ public class HomepageService {
         politicianRepository
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
+
+    if (homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType()) == null) {
+      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
+    }
 
     Homepage homepage =
         homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType());

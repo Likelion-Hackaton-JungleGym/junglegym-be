@@ -12,7 +12,5 @@ public interface HomepageRepository extends JpaRepository<Homepage, Long> {
 
   List<Homepage> findAllByPolitician_Id(Long PoliticianId);
 
-  boolean existsByPoliticianAndLinkType(Politician p, LinkType lt);
-
   Homepage findByPoliticianAndLinkType(Politician p, LinkType lt);
 }
