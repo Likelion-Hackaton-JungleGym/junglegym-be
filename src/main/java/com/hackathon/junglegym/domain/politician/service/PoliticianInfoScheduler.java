@@ -1,10 +1,9 @@
 package com.hackathon.junglegym.domain.politician.service;
 
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
@@ -14,7 +13,7 @@ public class PoliticianInfoScheduler {
   public final PoliticianInfoSync svc;
 
   // 매주 일요일 0시에 실행
-  @Scheduled(cron = "0 11 16 ? * 5", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 0 17 ? * 5", zone = "Asia/Seoul")
   public void politicianInfo() {
     try {
       int n = svc.syncAllByRegions();
