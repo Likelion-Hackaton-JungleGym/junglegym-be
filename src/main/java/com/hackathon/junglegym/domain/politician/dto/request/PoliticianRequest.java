@@ -39,9 +39,6 @@ public class PoliticianRequest {
   @Schema(description = "당선된 선거", example = "제21대, 제22대")
   private String retryUnit;
 
-  @Schema(description = "프로필 사진", example = "url 주소")
-  private String profileImg;
-
   @Schema(description = "약력", example = "학력~~ 약력~~")
   private String careerSummary;
 

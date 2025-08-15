@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.hackathon.junglegym.domain.politician.dto.request.PoliticianUpdateRequest;
 import com.hackathon.junglegym.domain.region.entity.Region;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
@@ -98,5 +99,84 @@ public class Politician extends BaseTimeEntity {
     this.roleName = roleName;
     this.region = region;
     this.role = Role.NATIONAL_ASSEMBLY;
+  }
+
+  public void updatePolitician(PoliticianUpdateRequest request, Region region) {
+    if (request.getUpdateName() != null) {
+      this.name = request.getUpdateName();
+    }
+    if (request.getPolyName() != null) {
+      this.polyName = request.getPolyName();
+    }
+    if (request.getCommittee() != null) {
+      this.committee = request.getCommittee();
+    }
+    if (request.getBirth() != null) {
+      this.birth = request.getBirth();
+    }
+    if (request.getRetryUnit() != null) {
+      this.retryUnit = request.getRetryUnit();
+    }
+    if (request.getRetryNumber() != null) {
+      this.retryNumber = request.getRetryNumber();
+    }
+    if (request.getCareerSummary() != null) {
+      this.careerSummary = request.getCareerSummary();
+    }
+    if (request.getRoleName() != null) {
+      this.roleName = request.getRoleName();
+    }
+    if (region != null) {
+      this.region = region;
+    }
+    if (request.getRole() != null) {
+      this.role = request.getRole();
+    }
+    if (request.getMilitary() != null) {
+      this.military = request.getMilitary();
+    }
+    if (request.getRegionText() != null) {
+      this.regionText = request.getRegionText();
+    }
+  }
+
+  public void updatePolitician(PoliticianUpdateRequest request) {
+    if (request.getUpdateName() != null) {
+      this.name = request.getUpdateName();
+    }
+    if (request.getPolyName() != null) {
+      this.polyName = request.getPolyName();
+    }
+    if (request.getCommittee() != null) {
+      this.committee = request.getCommittee();
+    }
+    if (request.getBirth() != null) {
+      this.birth = request.getBirth();
+    }
+    if (request.getRetryUnit() != null) {
+      this.retryUnit = request.getRetryUnit();
+    }
+    if (request.getRetryNumber() != null) {
+      this.retryNumber = request.getRetryNumber();
+    }
+    if (request.getCareerSummary() != null) {
+      this.careerSummary = request.getCareerSummary();
+    }
+    if (request.getRoleName() != null) {
+      this.roleName = request.getRoleName();
+    }
+    if (request.getRole() != null) {
+      this.role = request.getRole();
+    }
+    if (request.getMilitary() != null) {
+      this.military = request.getMilitary();
+    }
+    if (request.getRegionText() != null) {
+      this.regionText = request.getRegionText();
+    }
+  }
+
+  public void updateImgUrl(String imgUrl) {
+    this.profileImg = imgUrl;
   }
 }

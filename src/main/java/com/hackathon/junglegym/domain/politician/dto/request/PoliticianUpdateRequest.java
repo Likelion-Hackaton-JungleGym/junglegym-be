@@ -16,7 +16,10 @@ import lombok.NoArgsConstructor;
 public class PoliticianUpdateRequest {
 
   @Schema(description = "수정할 정치인 이름", example = "김영배")
-  private String findName;
+  private String updateName;
+
+  @Schema(description = "수정할 지역명", example = "성북구")
+  private String updateRegionName;
 
   @Schema(description = "지역명", example = "성북구")
   private String regionName;
@@ -41,9 +44,6 @@ public class PoliticianUpdateRequest {
 
   @Schema(description = "당선된 선거", example = "제21대, 제22대")
   private String retryUnit;
-
-  @Schema(description = "프로필 사진", example = "url 주소")
-  private String profileImg;
 
   @Schema(description = "약력", example = "학력~~ 약력~~")
   private String careerSummary;
