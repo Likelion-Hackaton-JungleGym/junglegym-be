@@ -1,6 +1,9 @@
 package com.hackathon.junglegym.domain.politician.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.hackathon.junglegym.domain.politician.exception.PoliticianErrorCode;
+import com.hackathon.junglegym.global.exception.CustomException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +17,18 @@ public enum Role {
 
   private final String description;
 
-  @JsonCreator
+  @JsonValue
+  public String getRole() {
+    return description;
+  }
+
+  @JsonCreator()
   public static Role fromValue(String value) {
-    return switch (value) {
-      case "국회의원" -> Role.NATIONAL_ASSEMBLY;
-      case "광역자치단체장" -> Role.MAYOR_PROVINCIAL;
-      case "기초자치단체장" -> Role.MAYOR_MUNICIPAL;
-      default -> null;
-    };
+    for (Role role : Role.values()) {
+      if (role.description.equalsIgnoreCase(value)) {
+        return role;
+      }
+    }
+    throw new CustomException(PoliticianErrorCode.POLITICIAN_ROLE_NOT_FOUND);
   }
 }

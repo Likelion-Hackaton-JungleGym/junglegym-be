@@ -15,7 +15,8 @@ public enum PoliticianErrorCode implements BaseErrorCode {
   POLITICIAN_ROLE_REQUIRED("POLITICIAN_003", "정치인 역할(Role)은 필수입니다.", HttpStatus.BAD_REQUEST),
   POLITICIAN_NAME_REQUIRED("POLITICIAN_004", "정치인 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
   POLITICIAN_ORIG_NM_NOT_FOUND(
-      "POLITICIAN_005", "선거구(ORIG_NM)에서 구 이름을 추출할 수 없습니다.", HttpStatus.BAD_GATEWAY);
+      "POLITICIAN_005", "선거구(ORIG_NM)에서 구 이름을 추출할 수 없습니다.", HttpStatus.BAD_GATEWAY),
+  POLITICIAN_ROLE_NOT_FOUND("POLITICIAN_006", "정치인 역할(Role)을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
   private final String code;
   private final String message;

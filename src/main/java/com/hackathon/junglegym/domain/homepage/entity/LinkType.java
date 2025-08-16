@@ -1,6 +1,9 @@
 package com.hackathon.junglegym.domain.homepage.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.hackathon.junglegym.domain.homepage.exception.HomepageErrorCode;
+import com.hackathon.junglegym.global.exception.CustomException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +21,18 @@ public enum LinkType {
 
   private final String linkName;
 
+  @JsonValue
+  public String getLinkType() {
+    return linkName;
+  }
+
   @JsonCreator
   public static LinkType fromValue(String value) {
-    return switch (value) {
-      case "인스타그램" -> LinkType.INSTAGRAM;
-      case "블로그" -> LinkType.BLOG;
-      case "페이스북" -> LinkType.FACEBOOK;
-      case "트위터" -> LinkType.TWITTER;
-      case "유튜브" -> LinkType.YOUTUBE;
-      case "홈페이지" -> LinkType.HOMEPAGE;
-      case "전과링크" -> LinkType.FINELINK;
-      default -> null;
-    };
+    for (LinkType linkType : LinkType.values()) {
+      if (linkType.linkName.equalsIgnoreCase(value)) {
+        return linkType;
+      }
+    }
+    throw new CustomException(HomepageErrorCode.HOMEPAGE_TYPE_NOT_FOUND);
   }
 }

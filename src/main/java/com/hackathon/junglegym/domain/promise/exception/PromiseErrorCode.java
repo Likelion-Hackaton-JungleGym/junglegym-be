@@ -11,7 +11,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PromiseErrorCode implements BaseErrorCode {
   PROMISE_ALREADY_EXISTS("PROMISE_RECORD_001", "이미 존재하는 공약입니다.", HttpStatus.CONFLICT),
-  PROMISE_RECORD_NOT_FOUND("PROMISE_RECORD_002", "공약 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+  PROMISE_RECORD_NOT_FOUND("PROMISE_RECORD_002", "공약 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+  PROMISE_PROGRESS_NOT_FOUND("PROMISE_RECORD_003", "공약 추진 경과를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
   private final String code;
   private final String message;
