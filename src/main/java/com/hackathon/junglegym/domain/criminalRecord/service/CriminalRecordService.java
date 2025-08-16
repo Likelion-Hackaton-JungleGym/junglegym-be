@@ -82,12 +82,12 @@ public class CriminalRecordService {
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
 
-    if (criminalRecordRepository.findByPoliticianAndTitle(politician, request.getTitle()) == null) {
-      throw new CustomException(CriminalRecordErrorCode.CRIMINAL_RECORD_NOT_FOUND);
-    }
-
     CriminalRecord criminalRecord =
         criminalRecordRepository.findByPoliticianAndTitle(politician, request.getTitle());
+
+    if (criminalRecord == null) {
+      throw new CustomException(CriminalRecordErrorCode.CRIMINAL_RECORD_NOT_FOUND);
+    }
 
     criminalRecord.update(request);
 
@@ -107,12 +107,12 @@ public class CriminalRecordService {
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
 
-    if (criminalRecordRepository.findByPoliticianAndTitle(politician, request.getTitle()) == null) {
-      throw new CustomException(CriminalRecordErrorCode.CRIMINAL_RECORD_NOT_FOUND);
-    }
-
     CriminalRecord criminalRecord =
         criminalRecordRepository.findByPoliticianAndTitle(politician, request.getTitle());
+
+    if (criminalRecord == null) {
+      throw new CustomException(CriminalRecordErrorCode.CRIMINAL_RECORD_NOT_FOUND);
+    }
 
     criminalRecordRepository.delete(criminalRecord);
   }

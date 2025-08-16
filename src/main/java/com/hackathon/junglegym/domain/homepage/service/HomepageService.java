@@ -80,12 +80,12 @@ public class HomepageService {
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
 
-    if (homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType()) == null) {
-      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
-    }
-
     Homepage homepage =
         homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType());
+
+    if (homepage == null) {
+      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
+    }
 
     homepage.update(request);
 
@@ -105,12 +105,12 @@ public class HomepageService {
             .findByNameAndRegion(request.getName(), region)
             .orElseThrow(() -> new CustomException(PoliticianErrorCode.POLITICIAN_NOT_FOUND));
 
-    if (homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType()) == null) {
-      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
-    }
-
     Homepage homepage =
         homepageRepository.findByPoliticianAndLinkType(politician, request.getLinkType());
+
+    if (homepage == null) {
+      throw new CustomException(HomepageErrorCode.HOMEPAGE_NOT_FOUND);
+    }
 
     homepageRepository.delete(homepage);
   }
