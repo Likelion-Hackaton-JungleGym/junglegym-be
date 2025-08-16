@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.hackathon.junglegym.domain.promise.dto.request.PromiseUpdateRequest;
 import com.hackathon.junglegym.domain.promiseCategory.entity.PromiseCategory;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
@@ -48,4 +49,16 @@ public class Promise extends BaseTimeEntity {
 
   @Column(name = "goal", columnDefinition = "TEXT")
   private String goal; // 정책 목표
+
+  public void update(PromiseUpdateRequest request) {
+    if (request.getNewName() != null) {
+      this.name = request.getNewName();
+    }
+    if (request.getNewProgress() != null) {
+      this.progress = request.getNewProgress();
+    }
+    if (request.getNewGoal() != null) {
+      this.goal = request.getNewGoal();
+    }
+  }
 }
