@@ -26,15 +26,7 @@ public class HomepageRequest {
 
   @Schema(
       description = "홈페이지 타입",
-      example = "INSTAGRAM",
-      allowableValues = {
-        "INSTAGRAM",
-        "BLOG",
-        "FACEBOOK",
-        "TWITTER",
-        "YOUTUBE",
-        "HOMEPAGE",
-        "FINELINK"
-      })
+      example = "인스타그램",
+      allowableValues = {"인스타그램", "블로그", "페이스북", "트위터", "유튜브", "홈페이지", "전과링크"})
   private LinkType linkType;
 }

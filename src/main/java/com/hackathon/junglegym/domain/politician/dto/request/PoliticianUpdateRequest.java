@@ -32,8 +32,8 @@ public class PoliticianUpdateRequest {
 
   @Schema(
       description = "역할",
-      example = "NATIONAL_ASSEMBLY(국회의원)",
-      allowableValues = {"NATIONAL_ASSEMBLY", "MAYOR_PROVINCIAL", "MAYOR_MUNICIPAL"})
+      example = "국회의원",
+      allowableValues = {"국회의원", "광역자치단체장", "기초자치단체장"})
   private Role role;
 
   @Schema(description = "소속 위원", example = "외교통일위원회")
