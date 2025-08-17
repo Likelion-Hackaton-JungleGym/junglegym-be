@@ -1,11 +1,13 @@
 package com.hackathon.junglegym.domain.promiseCategory.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.domain.promiseCategory.dto.response.PromiseCategoryResponse;
 import com.hackathon.junglegym.domain.promiseCategory.entity.PromiseCategory;
 
@@ -26,4 +28,6 @@ public interface PromiseCategoryRepository extends JpaRepository<PromiseCategory
       @Param("politicianId") Long politicianId);
 
   boolean existsById(Long id);
+
+  Optional<PromiseCategory> findByPoliticianAndTitle(Politician p, String title);
 }

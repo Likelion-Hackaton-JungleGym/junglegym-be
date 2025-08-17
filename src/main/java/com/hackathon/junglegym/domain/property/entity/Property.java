@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import com.hackathon.junglegym.domain.politician.entity.Politician;
+import com.hackathon.junglegym.domain.property.dto.request.PropertyRequest;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
 import lombok.AccessLevel;
@@ -45,4 +46,16 @@ public class Property extends BaseTimeEntity {
 
   @Column(name = "capital")
   private Long capital; // 순 자산 = 총 자산 - 총 부채
+
+  public void update(PropertyRequest request) {
+    if (request.getTotalCapital() != null) {
+      this.totalCapital = request.getTotalCapital();
+    }
+    if (request.getTotalDebt() != null) {
+      this.totalDebt = request.getTotalDebt();
+    }
+    if (request.getCapital() != null) {
+      this.capital = request.getCapital();
+    }
+  }
 }

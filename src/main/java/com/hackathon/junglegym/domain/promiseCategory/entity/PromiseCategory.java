@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import com.hackathon.junglegym.domain.politician.entity.Politician;
+import com.hackathon.junglegym.domain.promiseCategory.dto.request.PromiseCategoryUpdateRequest;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
 import lombok.AccessLevel;
@@ -42,4 +43,13 @@ public class PromiseCategory extends BaseTimeEntity {
 
   @Column(name = "content")
   private String content; // 공약 분야 텍스트
+
+  public void update(PromiseCategoryUpdateRequest request) {
+    if (request.getNewTitle() != null) {
+      this.title = request.getNewTitle();
+    }
+    if (request.getNewContent() != null) {
+      this.content = request.getNewContent();
+    }
+  }
 }

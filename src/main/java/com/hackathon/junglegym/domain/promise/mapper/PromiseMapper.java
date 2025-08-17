@@ -3,9 +3,12 @@ package com.hackathon.junglegym.domain.promise.mapper;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.hackathon.junglegym.domain.promise.dto.request.PromiseRequest;
 import com.hackathon.junglegym.domain.promise.dto.response.PromiseProgressSummaryResponse;
+import com.hackathon.junglegym.domain.promise.dto.response.PromiseResponse;
 import com.hackathon.junglegym.domain.promise.entity.Promise;
 import com.hackathon.junglegym.domain.promise.entity.PromiseProgress;
+import com.hackathon.junglegym.domain.promiseCategory.entity.PromiseCategory;
 
 public class PromiseMapper {
 
@@ -72,5 +75,25 @@ public class PromiseMapper {
         .map(p -> p.getUpdatedAt().toLocalDate()) // updatedAt이 LocalDateTime이라고 가정
         .max(LocalDate::compareTo) // 날짜 비교
         .orElse(null); // 데이터 없으면 null 로 반환
+  }
+
+  // Entity -> Response
+  public static PromiseResponse toPromiseResponse(Promise promise) {
+    return PromiseResponse.builder()
+        .promiseId(promise.getId())
+        .name(promise.getName())
+        .progress(promise.getProgress())
+        .goal(promise.getGoal())
+        .build();
+  }
+
+  // Request -> Entity
+  public static Promise toPromise(PromiseRequest request, PromiseCategory promiseCategory) {
+    return Promise.builder()
+        .category(promiseCategory)
+        .name(request.getName())
+        .progress(request.getProgress())
+        .goal(request.getGoal())
+        .build();
   }
 }

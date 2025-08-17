@@ -1,7 +1,5 @@
 package com.hackathon.junglegym.domain.politician.dto.response;
 
-import com.hackathon.junglegym.domain.politician.entity.Role;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +24,6 @@ public class PoliticianResponse {
 
   @Schema(description = "정당 이름", example = "더불어민주당")
   private String polyName;
-
-  @Schema(description = "역할", example = "NATIONAL_ASSEMBLY(국회의원)")
-  private Role role;
 
   @Schema(description = "소속 위원", example = "외교통일위원회")
   private String committee;

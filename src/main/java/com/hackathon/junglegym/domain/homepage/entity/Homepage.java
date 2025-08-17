@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.hackathon.junglegym.domain.homepage.dto.request.HomepageRequest;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
@@ -45,4 +46,8 @@ public class Homepage extends BaseTimeEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "link_type", nullable = false)
   private LinkType linkType;
+
+  public void update(HomepageRequest request) {
+    this.link = request.getLink();
+  }
 }

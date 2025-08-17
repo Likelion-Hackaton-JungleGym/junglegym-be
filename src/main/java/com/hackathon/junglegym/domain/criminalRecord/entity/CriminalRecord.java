@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.hackathon.junglegym.domain.criminalRecord.dto.request.CriminalRecordUpdateRequest;
 import com.hackathon.junglegym.domain.politician.entity.Politician;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
@@ -42,4 +43,13 @@ public class CriminalRecord extends BaseTimeEntity {
 
   @Column(name = "fine")
   private Long fine; // 벌금 (단위: 원)
+
+  public void update(CriminalRecordUpdateRequest request) {
+    if (request.getNewTitle() != null) {
+      this.title = request.getNewTitle();
+    }
+    if (request.getNewFine() != null) {
+      this.fine = request.getNewFine();
+    }
+  }
 }

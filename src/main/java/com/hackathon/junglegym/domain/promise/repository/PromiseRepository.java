@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.hackathon.junglegym.domain.promise.dto.response.PromiseResponse;
 import com.hackathon.junglegym.domain.promise.entity.Promise;
+import com.hackathon.junglegym.domain.promiseCategory.entity.PromiseCategory;
 
 public interface PromiseRepository extends JpaRepository<Promise, Long> {
 
@@ -15,12 +16,14 @@ public interface PromiseRepository extends JpaRepository<Promise, Long> {
 
   @Query(
       """
-        select new com.hackathon.junglegym.domain.promise.dto.response.PromiseResponse(
-          p.id, p.name, p.progress, p.goal
-        )
-        from Promise p
-        where p.category.id = :categoryId
-        order by p.id asc
-      """)
+            select new com.hackathon.junglegym.domain.promise.dto.response.PromiseResponse(
+              p.id, p.name, p.progress, p.goal
+            )
+            from Promise p
+            where p.category.id = :categoryId
+            order by p.id asc
+          """)
   List<PromiseResponse> findPromisesByCategoryId(@Param("categoryId") Long categoryId);
+
+  Promise findByCategoryAndName(PromiseCategory pc, String name);
 }

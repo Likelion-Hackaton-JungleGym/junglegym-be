@@ -18,7 +18,6 @@ public class PoliticianMapper {
         .regionName(politician.getRegion().getName())
         .name(politician.getName())
         .polyName(politician.getPolyName())
-        .role(politician.getRole())
         .committee(politician.getCommittee())
         .birth(politician.getBirth())
         .retryNumber(politician.getRetryNumber())
@@ -55,7 +54,6 @@ public class PoliticianMapper {
         .regionName(politician.getRegion().getName())
         .name(politician.getName())
         .polyName(politician.getPolyName())
-        .role(politician.getRole())
         .profileImg(politician.getProfileImg())
         .roleName(politician.getRoleName())
         .build();
