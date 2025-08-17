@@ -68,7 +68,6 @@ dependencies {
     // ai api, json Parsing
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
-
 }
 
 tasks.named('compileJava') {
