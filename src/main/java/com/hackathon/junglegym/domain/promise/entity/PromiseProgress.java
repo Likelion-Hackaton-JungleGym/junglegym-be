@@ -1,5 +1,10 @@
 package com.hackathon.junglegym.domain.promise.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.hackathon.junglegym.domain.promise.exception.PromiseErrorCode;
+import com.hackathon.junglegym.global.exception.CustomException;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,4 +26,19 @@ public enum PromiseProgress {
 
   // 한글 설명
   // System.out.println(progress.getDescription()); // 정상추진
+
+  @JsonValue
+  public String getPromiseProgress() {
+    return description;
+  }
+
+  @JsonCreator
+  public static PromiseProgress fromValue(String value) {
+    for (PromiseProgress progress : PromiseProgress.values()) {
+      if (progress.description.equalsIgnoreCase(value)) {
+        return progress;
+      }
+    }
+    throw new CustomException(PromiseErrorCode.PROMISE_PROGRESS_NOT_FOUND);
+  }
 }

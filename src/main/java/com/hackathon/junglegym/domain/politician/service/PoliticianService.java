@@ -62,7 +62,8 @@ public class PoliticianService {
 
   // 지역별 전체 조회
   public List<PoliticianByRegionResponse> getAllPoliticianByRegion(String regionName) {
-    List<Politician> politicianList = politicianRepository.findAllByRegion_Name(regionName);
+    List<Politician> politicianList =
+        politicianRepository.findAllByRegion_NameIn(List.of(regionName, "서울시"));
     List<PoliticianByRegionResponse> responseList = new ArrayList<>();
 
     for (Politician p : politicianList) {
@@ -83,6 +84,7 @@ public class PoliticianService {
   }
 
   // 수정
+  @Transactional
   public PoliticianResponse updatePolitician(PoliticianUpdateRequest updateRequest) {
     Region region =
         regionRepository
@@ -109,6 +111,7 @@ public class PoliticianService {
   }
 
   // 삭제
+  @Transactional
   public void deletePolitician(String name, String regionName) {
     Region region =
         regionRepository
@@ -125,6 +128,7 @@ public class PoliticianService {
     log.info("[정치인 삭제] 이름: {}, 지역: {}", name, regionName);
   }
 
+  @Transactional
   public PoliticianResponse createPoliticianImg(String name, String regionName, S3Response imgUrl) {
     Region region =
         regionRepository
