@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 // delete 호출 시 실제 삭제 대신 is_deleted = true 업데이트
-@SQLDelete(sql = "UPDATE politician_issue SET is_deleted = true WHERE issue_id = ?")
+@SQLDelete(sql = "UPDATE politician_issue SET is_deleted = true WHERE politician_issue_id = ?")
 // 기본 조회는 is_deleted = false 인 행만
 @Where(clause = "is_deleted = false")
 public class PoliticianIssue extends BaseTimeEntity {
@@ -47,7 +47,7 @@ public class PoliticianIssue extends BaseTimeEntity {
   @Column(name = "title")
   private String title; // 기사 제목
 
-  @Column(name = "link")
+  @Column(name = "link", columnDefinition = "TEXT")
   private String link; // 기사 링크
 
   // F: 프론트 제공, T: 제공X
