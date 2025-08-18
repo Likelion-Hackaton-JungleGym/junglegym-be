@@ -47,7 +47,7 @@ public class Activity extends BaseTimeEntity {
   @Column(name = "title")
   private String title; // 기사 제목
 
-  @Column(name = "link")
+  @Column(name = "link", columnDefinition = "TEXT")
   private String link; // 기사 링크
 
   // F: 프론트에 제공, T: 제공 X

@@ -40,7 +40,7 @@ public class Homepage extends BaseTimeEntity {
   @JoinColumn(name = "politician_id", nullable = false)
   private Politician politician;
 
-  @Column(name = "link")
+  @Column(name = "link", columnDefinition = "TEXT")
   private String link; // 홈페이지 주소
 
   @Enumerated(EnumType.STRING)

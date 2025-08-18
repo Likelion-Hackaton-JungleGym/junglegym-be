@@ -54,7 +54,7 @@ public class RegionNews extends BaseTimeEntity {
   @Column(name = "content", columnDefinition = "TEXT")
   private String content; // 내용(길 수 있음)
 
-  @Column(name = "link")
+  @Column(name = "link", columnDefinition = "TEXT")
   private String link; // 원본 링크
 
   @Builder.Default
