@@ -62,6 +62,12 @@ public class PoliticianService {
 
   // 지역별 전체 조회
   public List<PoliticianByRegionResponse> getAllPoliticianByRegion(String regionName) {
+    // 1) 지역 검증
+    regionRepository
+        .findByName(regionName)
+        .orElseThrow(() -> new CustomException(RegionErrorCode.REGION_NOT_FOUND));
+
+    // 2) 해당 지역 + "서울시" 조회
     List<Politician> politicianList =
         politicianRepository.findAllByRegion_NameIn(List.of(regionName, "서울시"));
     List<PoliticianByRegionResponse> responseList = new ArrayList<>();
