@@ -24,6 +24,7 @@ public class QuestionService {
   private final QdrantService qdrantService;
   private final ChatCompletionService chat;
   private final QuestionRepository questionRepository;
+  private final String NO_MATCH_MSG = "해당 질문과 관련된 법 조항을 찾을 수 없습니다.";
 
   @Transactional
   public QuestionResponse chat(QuestionRequest request) {
@@ -33,21 +34,24 @@ public class QuestionService {
     final float[] qvec = embeddingService.embed(question);
 
     // 2. Qdrant 검색 -> 관련 법 조항 Top 1 만 사용
-    String relatedLaw = qdrantService.searchTop1(qvec);
+    var hitOpt = qdrantService.searchTop1WithScore(qvec);
 
-    // 3. 컨텍스트 구성
-    String context = relatedLaw == null ? "" : relatedLaw;
+    // 3. GPT 답변 생성
+    String relatedLaw = null;
 
-    // 4. GPT 답변 생성
-    String answer;
-    if (context.isBlank()) {
-      answer = "제공된 자료에서 관련 내용을 찾지 못했습니다. 질문을 더 구체적으로 작성해주시면 감사하겠습니다.";
+    double similarityThreshold = 0.4;
+    if (hitOpt.isEmpty()
+        || hitOpt.get().score() < similarityThreshold
+        || hitOpt.get().text().isBlank()) {
+      relatedLaw = NO_MATCH_MSG;
     } else {
-      answer = chat.answer(question, context, 700);
+      relatedLaw = hitOpt.get().text();
     }
 
-    // 5. DB 저장 (privated = false일 때만)
-    if (!request.isPrivated()) {
+    String answer = chat.answer(question, relatedLaw, 700);
+
+    // 4. DB 저장 (privated = false일 때 또는 관련 법 조항을 찾았을 때)
+    if (!request.isPrivated() && !NO_MATCH_MSG.equals(relatedLaw)) {
       try {
         Question q =
             Question.builder().question(question).answer(answer).constitution(relatedLaw).build();
