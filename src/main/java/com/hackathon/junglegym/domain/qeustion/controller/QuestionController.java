@@ -16,6 +16,7 @@ import com.hackathon.junglegym.domain.qeustion.dto.response.QuestionResponse;
 import com.hackathon.junglegym.domain.qeustion.service.QuestionService;
 import com.hackathon.junglegym.global.response.BaseResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class QuestionController {
 
   private final QuestionService questionService;
 
+  @Operation(summary = "질문하기", description = "질문 생성 및 생성된 질문 정보 반환 (201 Created)")
   @PostMapping("/chat")
   public ResponseEntity<BaseResponse<QuestionResponse>> chat(
       @Parameter(description = "질문 내용", example = "서울시장 뭐시기") @Valid @RequestBody
@@ -37,6 +39,7 @@ public class QuestionController {
     return ResponseEntity.ok(BaseResponse.success("질문 성공", response));
   }
 
+  @Operation(summary = "질문 목록 조회(최신 10개)", description = "최신 질문 10개 정보를 반환합니다. (200 ok)")
   @GetMapping("/chat")
   public ResponseEntity<BaseResponse<List<QuestionResponse>>> get10Chats() {
     return ResponseEntity.ok(BaseResponse.success(questionService.get10Chats()));

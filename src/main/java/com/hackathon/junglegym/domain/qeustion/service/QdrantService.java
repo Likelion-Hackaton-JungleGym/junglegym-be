@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -123,23 +124,6 @@ public class QdrantService {
         .block();
   }
 
-  public static class Hit {
-
-    public final String lawName;
-    public final Integer article;
-    public final String articleTitle;
-    public final String snippet;
-    public final Double score;
-
-    public Hit(String lawName, Integer article, String articleTitle, String snippet, Double score) {
-      this.lawName = lawName;
-      this.article = article;
-      this.articleTitle = articleTitle;
-      this.snippet = snippet;
-      this.score = score;
-    }
-  }
-
   @SuppressWarnings("unchecked")
   public List<String> searchSimilar(float[] queryVector, int limit, boolean includeSnippet) {
     Map<String, Object> body = new LinkedHashMap<>();
@@ -229,5 +213,41 @@ public class QdrantService {
 
   private static String safe(String s) {
     return s == null ? "" : s;
+  }
+
+  public record SimilarHit(String text, float score) {}
+
+  public Optional<SimilarHit> searchTop1WithScore(float[] queryVector) {
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("vector", queryVector);
+    body.put("limit", 1);
+    body.put("with_payload", true);
+    body.put("with_vectors", false);
+
+    Map<?, ?> res =
+        client
+            .post()
+            .uri("/collections/{c}/points/search", collection)
+            .bodyValue(body)
+            .retrieve()
+            .bodyToMono(Map.class)
+            .block();
+
+    if (res == null || !(res.get("result") instanceof List<?> list) || list.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Map<String, Object> r = (Map<String, Object>) list.getFirst();
+    Number scoreNum = (Number) r.getOrDefault("score", 0);
+    float score = scoreNum.floatValue();
+
+    Map<String, Object> p = (Map<String, Object>) r.getOrDefault("payload", Map.of());
+    String lawName = (String) p.getOrDefault("law_name", "");
+    Integer article = p.get("article") instanceof Number ar ? ar.intValue() : null;
+    String title = (String) p.getOrDefault("article_title", "");
+    String text = (String) p.getOrDefault("text", "");
+
+    String formatted = formateRelatedLawString(lawName, article, title, text, true);
+    return Optional.of(new SimilarHit(formatted, score));
   }
 }
