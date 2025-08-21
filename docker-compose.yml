@@ -65,6 +65,17 @@ services:
     networks:
       - junglegym-network
 
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    ports:
+      - "9876:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - junglegym-network
+    restart: always
+
 networks:
   junglegym-network:
     driver: bridge  # Docker 기본 브리지 네트워크를 사용
