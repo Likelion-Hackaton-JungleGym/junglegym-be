@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum MediaOrientationErrorCode implements BaseErrorCode {
+  MEDIA_EXISTS("MEDIA_001", "이미 존재하는 미디어입니다.", HttpStatus.CONFLICT),
   MEDIA_NOT_FOUND("MEDIA_002", "해당 미디어 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
   private final String code;
