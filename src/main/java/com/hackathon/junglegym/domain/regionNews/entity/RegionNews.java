@@ -1,7 +1,11 @@
 package com.hackathon.junglegym.domain.regionNews.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,6 +17,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.hackathon.junglegym.domain.mediaOrientation.entity.MediaOrientation;
 import com.hackathon.junglegym.domain.region.entity.Region;
 import com.hackathon.junglegym.global.common.BaseTimeEntity;
 
@@ -45,17 +50,28 @@ public class RegionNews extends BaseTimeEntity {
   @JoinColumn(name = "region_id", nullable = false)
   private Region region;
 
-  @Column(name = "media")
-  private String media; // 언론사
+  @Column(name = "category", nullable = false)
+  @Enumerated(EnumType.STRING)
+  private NewsCategory category;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "media", referencedColumnName = "media")
+  private MediaOrientation mediaOrientation; // 언론사 정치성향 이미지 (media로 조인, 읽기 전용)
 
   @Column(name = "title")
   private String title; // 제목
 
-  @Column(name = "content", columnDefinition = "TEXT")
-  private String content; // 내용(길 수 있음)
+  @Column(name = "oneLineContent")
+  private String oneLineContent; // 내용(길 수 있음)
+
+  @Column(name = "summary", columnDefinition = "TEXT")
+  private String summary; // 내용(길 수 있음)
 
   @Column(name = "link", columnDefinition = "TEXT")
   private String link; // 원본 링크
+
+  @Column(name = "date")
+  private LocalDate date; // 노출 날짜
 
   @Builder.Default
   @Column(name = "is_deleted", nullable = false)

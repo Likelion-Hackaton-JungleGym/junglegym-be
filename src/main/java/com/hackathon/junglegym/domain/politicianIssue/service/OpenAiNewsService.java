@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -163,4 +165,51 @@ public class OpenAiNewsService {
   //            + "\n출력은 한 줄만, 마침표 없이.";
   //    return chat(system, user, 0.2, 64).replace("\n", " ").trim();
   //  }
+
+  @Getter
+  @AllArgsConstructor
+  public static class ArticleAnalysis {
+
+    private final boolean civicInfo; // 정보성 뉴스 여부
+    private final String oneLine; // 한 줄 요약 (28~35자)
+    private final String summary; // 2~3문장 요약
+    private final String category; // 정치/경제/사회/세계/생활/문화/IT과학 중 1개
+  }
+
+  public ArticleAnalysis analyzeArticle(String title, String snippet) throws Exception {
+    String system =
+        "다음 한국어 기사에 대해 4가지를 JSON으로만 응답하세요.\n"
+            + "필드: civicInfo(Y/N), oneLine(28~35자, 마침표X), summary(2~3문장), category(정치|경제|사회|세계|생활/문화|IT/과학)\n"
+            + "\n규칙:\n"
+            + "- civicInfo 판정 기준:\n"
+            + "  · Y = 주민 생활과 직결되는 행정·정책·생활 정보.\n"
+            + "    예) 정책 발표/시행, 지원금·쿠폰 지급, 모집·신청 안내, 공사·교통·시설 공지, 점검·단속 결과, 지역 행사/축제/교육/문화 프로그램 안내, 협약·MOU 체결, 센터·시설 개소.\n"
+            + "  · N = 생활과 직접 관련 없는 보도.\n"
+            + "    예) 정치인/공무원/대통령/시장/군수 방문·행보·행사 참석, 단순 발언·인터뷰·칼럼·논평, 의혹·수사·사건사고·범죄, 연예·스포츠, 개인 미담.\n"
+            + "- oneLine은 과장·평가 없이 핵심만 (28~35자, 마침표X).\n"
+            + "- summary는 2~3문장으로 간결히.\n"
+            + "- category는 정확히 후보 중 하나만.\n"
+            + "출력은 JSON 1개만. 다른 텍스트 금지.";
+
+    String user =
+        """
+            제목: %s
+            요약/문단: %s
+            응답형식:
+            {"civicInfo":"Y|N","oneLine":"...","summary":"...","category":"정치|경제|사회|세계|생활/문화|IT/과학"}
+            """
+            .formatted(safe(title), safe(snippet));
+
+    String out = chat(system, user, 0.1, 256).trim();
+
+    // 최소한의 방어적 파싱
+    JsonNode root = om.readTree(out);
+    String civicInfo = root.path("civicInfo").asText("").trim().toUpperCase(Locale.ROOT);
+    String oneLine = root.path("oneLine").asText("");
+    String summary = root.path("summary").asText("");
+    String category = root.path("category").asText("");
+
+    boolean isCivic = civicInfo.startsWith("Y");
+    return new ArticleAnalysis(isCivic, oneLine, summary, category);
+  }
 }
