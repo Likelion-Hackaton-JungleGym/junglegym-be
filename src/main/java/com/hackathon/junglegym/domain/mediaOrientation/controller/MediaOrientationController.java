@@ -1,13 +1,7 @@
 package com.hackathon.junglegym.domain.mediaOrientation.controller;
 
-import com.hackathon.junglegym.domain.mediaOrientation.dto.request.MediaOrientationCreateRequest;
-import com.hackathon.junglegym.domain.mediaOrientation.dto.response.MediaOrientationResponse;
-import com.hackathon.junglegym.domain.mediaOrientation.service.MediaOrientationService;
-import com.hackathon.junglegym.global.response.BaseResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +11,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.hackathon.junglegym.domain.mediaOrientation.dto.request.MediaOrientationCreateRequest;
+import com.hackathon.junglegym.domain.mediaOrientation.dto.response.MediaOrientationResponse;
+import com.hackathon.junglegym.domain.mediaOrientation.service.MediaOrientationService;
+import com.hackathon.junglegym.global.response.BaseResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
