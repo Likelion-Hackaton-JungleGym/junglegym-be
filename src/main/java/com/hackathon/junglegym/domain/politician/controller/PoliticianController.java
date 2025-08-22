@@ -98,10 +98,10 @@ public class PoliticianController {
   @Operation(
       summary = "[개발자] 특정 정치인 삭제",
       description = "이름과 지역명을 입력받고, 해당 정치인 데이터를 삭제합니다. (200 ok)")
-  @DeleteMapping("/dev/politician")
+  @DeleteMapping("/dev/politician/{regionName}/{name}")
   public ResponseEntity<BaseResponse<String>> deletePolitician(
-      @Parameter(description = "삭제할 정치인 이름", example = "김영배") @Valid @RequestBody String name,
-      @Parameter(description = "지역명", example = "성북구") @Valid @RequestBody String regionName) {
+      @Parameter(description = "삭제할 정치인 이름", example = "김영배") @PathVariable String name,
+      @Parameter(description = "지역명", example = "성북구") @PathVariable String regionName) {
     politicianService.deletePolitician(name, regionName);
     return ResponseEntity.ok(BaseResponse.success("정치인 삭제 완료"));
   }
