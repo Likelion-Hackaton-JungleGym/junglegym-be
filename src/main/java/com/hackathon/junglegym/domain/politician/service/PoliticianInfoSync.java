@@ -36,6 +36,11 @@ public class PoliticianInfoSync {
 
     for (JsonNode row : rows) {
       String origNm = openApi.text(row, "ORIG_NM");
+
+      if (!isSeoulOrigNm(origNm)) {
+        continue;
+      }
+
       Optional<String> guName = extractGuName(origNm);
 
       if (guName.isEmpty()) {
@@ -51,6 +56,12 @@ public class PoliticianInfoSync {
       }
     }
     return saved;
+  }
+
+  private static boolean isSeoulOrigNm(String origNm) {
+    if (origNm == null) return false;
+    String first = origNm.trim().split("\\s+")[0];
+    return "서울".equals(first);
   }
 
   @Transactional
