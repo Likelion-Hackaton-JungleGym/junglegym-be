@@ -56,7 +56,7 @@ public class RegionNews extends BaseTimeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "media", referencedColumnName = "media")
-  private MediaOrientation mediaOrientation; // 언론사 정치성향 이미지 (media로 조인, 읽기 전용)
+  private MediaOrientation mediaOrientation; // 언론사 정치성향 이미지 (media로 조인, 읽기 전용)\
 
   @Column(name = "media_name")
   private String mediaName; // 추가 : 언론사명 텍스트(denormalized), FK가 없어도 노출용으로 사용
