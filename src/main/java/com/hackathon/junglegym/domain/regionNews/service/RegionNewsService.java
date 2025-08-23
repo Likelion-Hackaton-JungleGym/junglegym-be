@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hackathon.junglegym.domain.mediaOrientation.entity.MediaOrientation;
+import com.hackathon.junglegym.domain.mediaOrientation.repository.MediaOrientationRepository;
 import com.hackathon.junglegym.domain.politicianIssue.dto.NewsItem;
 import com.hackathon.junglegym.domain.politicianIssue.service.GoogleNewsRssCrawler;
 import com.hackathon.junglegym.domain.politicianIssue.service.OpenAiNewsService;
@@ -42,6 +44,7 @@ public class RegionNewsService {
   private final RegionRepository regionRepository;
   private final RegionNewsRepository regionNewsRepository;
   private final OpenAiNewsService ai;
+  private final MediaOrientationRepository mediaOrientationRepository;
 
   private final GoogleNewsRssCrawler google = new GoogleNewsRssCrawler();
 
@@ -186,7 +189,8 @@ public class RegionNewsService {
             java.util.concurrent.CompletableFuture.runAsync(
                 () -> {
                   try {
-                    String title = Jsoup.parse(Objects.toString(n.title(), "")).text();
+                    String rawTitle = Objects.toString(n.title(), "");
+                    String title = Jsoup.parse(rawTitle).text();
                     String snip = Objects.toString(n.snippet(), "");
 
                     // 1회 호출로 분석
@@ -194,17 +198,30 @@ public class RegionNewsService {
                     if (!a.isCivicInfo()) {
                       return; // 정보성 아니면 스킵
                     }
+                    // 1) 언론사명 추출
+                    String mediaName = extractMediaName(n, title);
+
+                    // 2) 제목 꼬리표 제거 (저장용)
+                    String cleanTitle = stripMediaSuffixFromTitle(title);
+
+                    // 3) MediaOrientation 조회(있으면 FK 세팅)
+                    MediaOrientation mo = null;
+                    if (mediaName != null && !mediaName.isBlank()) {
+                      mo = mediaOrientationRepository.findById(mediaName.trim()).orElse(null);
+                    }
 
                     String catStr = a.getCategory();
                     RegionNews row =
                         RegionNews.builder()
                             .region(region)
                             .category(mapCategory(catStr))
-                            .title(cut(title, 255))
+                            .title(cut(cleanTitle, 255)) // ✅ 언론사 꼬리표 제거된 제목 저장
                             .oneLineContent(cut(a.getOneLine(), 255))
                             .summary(a.getSummary())
                             .link(normalizeGoogleLink(n.link()))
                             .date(n.publishedAt() != null ? n.publishedAt().toLocalDate() : start)
+                            .mediaOrientation(mo) // FK (있으면)
+                            .mediaName(cut(mediaName, 100)) // 텍스트도 항상 저장 (없으면 null)
                             .build();
 
                     regionNewsRepository.save(row);
@@ -365,7 +382,17 @@ public class RegionNewsService {
 
       // 소스 필터
       String src = Objects.toString(n.source(), "").trim();
-      boolean srcOk = allowSecondary ? (src.length() > 0) : sourceMatchesPrimary(src);
+
+      // 제목은 먼저 뽑아둔다 (꼬리표 추출/비교에 사용)
+      String rawTitle = Objects.toString(n.title(), "");
+      String titleText = Jsoup.parse(rawTitle).text();
+      // boolean srcOk = allowSecondary ? (src.length() > 0) : sourceMatchesPrimary(src); // 기존
+      // 교체:
+      boolean srcOk =
+          allowSecondary
+              ? (src.length() > 0 || (extractMediaFromTitle(titleText) != null))
+              : (sourceMatchesPrimary(src)
+                  || sourceMatchesPrimary(extractMediaFromTitle(titleText)));
       if (!srcOk) {
         continue;
       }
@@ -399,7 +426,13 @@ public class RegionNewsService {
   }
 
   private boolean sourceMatchesPrimary(String source) {
+    if (source == null) {
+      return false;
+    }
     String s = source.trim();
+    if (s.isEmpty()) {
+      return false;
+    }
     if (PRIMARY_SOURCES.contains(s)) {
       return true;
     }
@@ -413,5 +446,82 @@ public class RegionNewsService {
   public void scheduledWeeklySync() {
     int total = syncWeeklyAllRegions();
     log.info("[REGION-NEWS] weekly scheduled sync done, totalSaved={}", total);
+  }
+
+  /** 언론사명 추출: source() 우선, 없으면 제목 꼬리표에서 추출 */
+  private String extractMediaName(NewsItem n, String title) {
+    // 1) RSS의 source 우선
+    String src = Objects.toString(n.source(), "").trim();
+    if (!src.isBlank()) {
+      return cleanMediaName(src);
+    }
+    // 2) 제목에서 추출
+    return cleanMediaName(extractMediaFromTitle(title));
+  }
+
+  /** 제목 끝의 " - 언론사" 또는 유사 패턴에서 언론사명 추출 */
+  private String extractMediaFromTitle(String title) {
+    if (title == null) {
+      return null;
+    }
+    String t = Jsoup.parse(title).text();
+
+    // 공통 하이픈/대시들 통일: " - "로 치환
+    String norm = t.replaceAll("\\s*[–—-]\\s*", " - ");
+
+    // 케이스1: 마지막 " - 언론사"
+    int dash = norm.lastIndexOf(" - ");
+    if (dash >= 0 && dash + 3 < norm.length()) {
+      String tail = norm.substring(dash + 3).trim();
+      if (!tail.isBlank()) {
+        return tail;
+      }
+    }
+
+    // 케이스2: "> 뉴스 - 언론사"
+    String marker = "> 뉴스 - ";
+    int k = norm.lastIndexOf(marker);
+    if (k >= 0 && k + marker.length() < norm.length()) {
+      String tail = norm.substring(k + marker.length()).trim();
+      if (!tail.isBlank()) {
+        return tail;
+      }
+    }
+
+    return null;
+  }
+
+  /** 저장용: 제목에서 언론사 꼬리표 제거 */
+  private String stripMediaSuffixFromTitle(String title) {
+    if (title == null) {
+      return null;
+    }
+    String t = Jsoup.parse(title).text();
+    String norm = t.replaceAll("\\s*[–—-]\\s*", " - ");
+
+    // "> 뉴스 - 언론사" 꼬리표 제거 우선
+    String marker = "> 뉴스 - ";
+    int m = norm.lastIndexOf(marker);
+    if (m >= 0) {
+      // 앞부분만 유지
+      return norm.substring(0, m).trim();
+    }
+
+    // 마지막 " - 언론사" 제거
+    int dash = norm.lastIndexOf(" - ");
+    if (dash >= 0) {
+      return norm.substring(0, dash).trim();
+    }
+
+    return t.trim(); // 변경 없음
+  }
+
+  /** PK 매칭 안정화(공백만 정리. 과도한 변환 금지) */
+  private String cleanMediaName(String name) {
+    if (name == null) {
+      return null;
+    }
+    String s = name.replaceAll("[\\u00A0\\p{Zs}]+", " ").trim();
+    return s.isEmpty() ? null : s;
   }
 }
