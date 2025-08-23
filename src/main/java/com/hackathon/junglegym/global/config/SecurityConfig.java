@@ -2,6 +2,7 @@ package com.hackathon.junglegym.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,6 +36,9 @@ public class SecurityConfig {
         .authorizeHttpRequests(
             request ->
                 request
+                    // ✅ 프리플라이트(OPTIONS) 전역 허용 — CORS 사전요청 통과
+                    .requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
                     // Swagger 경로 인증 필요
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()
