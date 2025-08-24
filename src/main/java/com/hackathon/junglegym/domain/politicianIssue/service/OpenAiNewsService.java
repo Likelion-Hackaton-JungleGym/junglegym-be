@@ -187,7 +187,7 @@ public class OpenAiNewsService {
             + "  · N = 생활과 직접 관련 없는 보도.\n"
             + "    예) 정치인/공무원/대통령/시장/군수 방문·행보·행사 참석, 단순 발언·인터뷰·칼럼·논평, 의혹·수사·사건사고·범죄, 연예·스포츠, 개인 미담.\n"
             + "- oneLine은 과장·평가 없이 핵심만 (28~35자, 마침표X).\n"
-            + "- summary는 2~3문장으로 간결히.\n"
+            + "- summary는 4~5줄 정도로 정보 최대한 담아서.\n"
             + "- category는 정확히 후보 중 하나만.\n"
             + "출력은 JSON 1개만. 다른 텍스트 금지.";
 
@@ -211,5 +211,30 @@ public class OpenAiNewsService {
 
     boolean isCivic = civicInfo.startsWith("Y");
     return new ArticleAnalysis(isCivic, oneLine, summary, category);
+  }
+
+  public String fixedLengthSummary130(String title, String body) throws Exception {
+    String system =
+        "너는 한국어 뉴스 요약기다. "
+            + "입력된 기사를 바탕으로 내용을 정리해 "
+            + "띄어쓰기 포함 130~140자의 한 문단으로 요약하라. "
+            + "조건:\n"
+            + "1) 주체·행동·대상·일정/계획이 포함될 것\n"
+            + "2) 문어체 한 문장, 마침표로 끝낼 것\n"
+            + "3) 과장·평가·주관 표현 금지\n"
+            + "4) 수치·날짜·고유명사, 수식어는 가능한 유지\n"
+            + "5) 따옴표·불릿·이모지 사용 금지\n"
+            + "출력은 요약문만.";
+
+    String user = "제목: " + safe(title) + "\n본문: " + safe(body) + "\n요약(125~135자, 한 문장):";
+    // 토큰은 여유있게, 온도 낮게
+    String out = chat(system, user, 0.1, 256).trim();
+    // 혹시 줄바꿈/따옴표 제거
+    out = out.replace("\n", " ").replaceAll("\\s+", " ").replaceAll("^\"|\"$", "");
+    //    // 길이 보정(너무 길면 컷)
+    //    if (out.length() > 135) {
+    //      out = out.substring(0, 135);
+    //    }
+    return out;
   }
 }
