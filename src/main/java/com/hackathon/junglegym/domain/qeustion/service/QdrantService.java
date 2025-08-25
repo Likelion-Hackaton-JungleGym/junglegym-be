@@ -1,7 +1,5 @@
 package com.hackathon.junglegym.domain.qeustion.service;
 
-import com.hackathon.junglegym.domain.qeustion.dto.Chunk;
-import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,12 +7,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import com.hackathon.junglegym.domain.qeustion.dto.Chunk;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 // Qdrant 컬렉션 생성 및 업서트
 @Service
@@ -214,9 +218,7 @@ public class QdrantService {
     return s == null ? "" : s;
   }
 
-  public record SimilarHit(String text, float score) {
-
-  }
+  public record SimilarHit(String text, float score) {}
 
   public Optional<SimilarHit> searchTop1WithScore(float[] queryVector) {
     Map<String, Object> body = new LinkedHashMap<>();
