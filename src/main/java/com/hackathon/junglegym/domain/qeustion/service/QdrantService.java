@@ -188,7 +188,8 @@ public class QdrantService {
       boolean includeSnippet) {
 
     String titlePart = (articleTitle == null || articleTitle.isBlank()) ? "" : " " + articleTitle;
-    String base = "%s 제%d조%s".formatted(safe(lawName), article == null ? 0 : article, titlePart);
+    String text = "%s 제%d조%s".formatted(safe(lawName), article == null ? 0 : article, titlePart);
+    String base = text.replace("\\R", "");
 
     if (!includeSnippet) {
       return base;
@@ -197,7 +198,9 @@ public class QdrantService {
     if (snippet == null || snippet.isBlank()) {
       return base;
     }
-    String sn = cut(snippet.trim(), 180);
+    String world = cut(snippet.trim(), 180);
+    String sn = world.replace("\\R", "");
+
     return base + "「" + sn + "」";
   }
 
