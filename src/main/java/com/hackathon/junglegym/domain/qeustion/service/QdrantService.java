@@ -200,7 +200,7 @@ public class QdrantService {
     }
     String world = cut(snippet.trim(), 180);
     String sn = world.replace("\\R", "");
-    
+
     return base + "\n" + "「" + sn + "」";
   }
 
